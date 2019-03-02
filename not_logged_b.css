@@ -98,6 +98,11 @@
 	width: 100px;
 }
 
+.userName {
+	width: 800px;
+	float: left;
+}
+
 .posterIcon {
 	width: 60px;
 	height: 60px;
