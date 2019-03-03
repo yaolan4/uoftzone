@@ -40,11 +40,13 @@
  		</div>
 
  		<!-- For the post body parts -->
- 		<div class="postBodyBox">
+ 		<div id="postBodyBox">
 
  			<!-- writing posts -->
- 			<textarea id='textarea' rows="8" cols="150" placeholder="Write Your Post Here"></textarea>
- 			<input type="submit" name="Submit">
+ 			<form id='writePost'>
+ 				<textarea id='textarea' rows="8" cols="150" placeholder="Write Your Post Here"></textarea>
+ 				<input type="submit" value="Submit">
+ 			</form>
  			<!-- first post -->
  			<div class="postSplit"></div>
  			<div class="post">
@@ -53,13 +55,13 @@
  				</div>
  				<div class="userName">User</div>
  				<div class="postContent">
- 					tin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+ 					Fusce bibendum tincidunt vehicula. Nam tellus diam, vulputate sit amet venenatis nec, ultricies at metus. Integer id efficitur est, eu ornare nunc.
  				</div>
- 				<div class="feedback">
+ 				<form class="feedback">
  					<button class="feedbackButton">Like</button>
  					<button class="feedbackButton">Reply</button>
  					<button class="feedbackButton">Report</button>
- 				</div>
+ 				</form>
  			</div>
 
  			
@@ -68,6 +70,6 @@
 
 
 	</div>
-
+<script type="text/javascript" src="logged_in.js"></script>
 </body>
 </html>
