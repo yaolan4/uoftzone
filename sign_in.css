@@ -7,7 +7,7 @@
     font-size: 50px;
     font-weight: bold;
     margin-left: 30px;
-    font-family: Comic Sans MS
+    font-family: Comic Sans MS;
 }
 
 .splitline {
@@ -46,7 +46,7 @@
 
 input[type=text]:focus {
     outline: none;
-    border: 3px solid #555;
+    border: 2px solid #555;
 }
 
 #buttons {
@@ -70,10 +70,19 @@ a{
 
 }
 
+#notAMemberDiv {
+    padding-right: 2px;
+    margin-top: 30px;
+}
+
 #notAMember {
-    float: right;
     color: grey;
     font-family: Comic Sans MS;
     margin-top: 30px;
     text-decoration: none;
+}
+
+.red {
+    color: red;
+    font-family: Comic Sans MS;
 }
