@@ -68,34 +68,7 @@ function allClickEvents(e) {
 		}
 	}
 	else if (e.target.classList.contains('feedbackButton')) { 
-		if (e.target.innerText == 'Like') {
-			e.target.innerText = 'Unlike';
-			// Figure out what index this post is in the posts list
-			// and increment the likes in that post
-			for (let i = 0; i < posts.length; i++) {
-				if ((users[posts[i].posterID].userName == 
-					e.target.parentElement.parentElement.children[1].innerText) && 
-					(posts[i].postContent == 
-					e.target.parentElement.parentElement.children[2].innerText) &&
-					posts[i].category == page) {
-						posts[i].likes++;
-					}
-			}
-		}
-		else if (e.target.innerText == 'Unlike') {
-			e.target.innerText = 'Like';
-			for (let i = 0; i < posts.length; i++) {
-				if ((users[posts[i].posterID].userName == 
-					e.target.parentElement.parentElement.children[1].innerText) && 
-					(posts[i].postContent == 
-					e.target.parentElement.parentElement.children[2].innerText) &&
-					posts[i].category == page) {
-						posts[i].likes--;
-					}
-			}
-
-		}
-		else if (e.target.innerText == 'Report'){
+		if (e.target.innerText == 'Report'){
 			for (let i = 0; i < posts.length; i++) {
 				if ((users[posts[i].posterID].userName == 
 					e.target.parentElement.parentElement.children[1].innerText) && 
@@ -121,6 +94,35 @@ function allClickEvents(e) {
 		addReplyPost(e.target.parentElement.parentElement, post);
 		e.target.parentElement.parentElement.removeChild(e.target.parentElement);
 	}
+	else if (e.target.classList.contains('unlike')) {
+		e.target.className = 'like';
+		e.target.src = 'like.jpg';
+		for (let i = 0; i < posts.length; i++) {
+				if ((users[posts[i].posterID].userName == 
+					e.target.parentElement.parentElement.parentElement.children[1].innerText) && 
+					(posts[i].postContent == 
+					e.target.parentElement.parentElement.parentElement.children[2].innerText) &&
+					posts[i].category == page) {
+						posts[i].likes++;
+						console.log(posts[i]);
+					}
+			}
+	}
+	else if (e.target.classList.contains('like')) {
+		e.target.className = 'unlike';
+		e.target.src = 'unlike.jpg';
+		for (let i = 0; i < posts.length; i++) {
+				if ((users[posts[i].posterID].userName == 
+					e.target.parentElement.parentElement.parentElement.children[1].innerText) && 
+					(posts[i].postContent == 
+					e.target.parentElement.parentElement.parentElement.children[2].innerText) &&
+					posts[i].category == page) {
+						posts[i].likes--;
+						console.log(posts[i])
+					}
+			}			
+	}
+
  }
 
 // DOM functions
