@@ -5,6 +5,11 @@ h1 {
     display: inline-block;
 }
 
+#wrapper{
+    width:  1900px;
+    margin: 0 auto;
+}
+
 body{
     font-family: "Comic Sans MS","Arial Black";
 }
@@ -166,6 +171,8 @@ table{
 
 }
 
+
+
 #usersTable{
     margin-left: 50px;
 }
@@ -173,8 +180,8 @@ table{
 
 td,th{
     text-align :center;
-    min-width: 220px;
-    max-width: 220px;
+    min-width: 165px;
+    max-width: 165px;
 
 }
 
@@ -182,7 +189,7 @@ td,th{
 .remove{
     position: relative;
     top:30px;
-    left:600px;
+    left:550px;
     text-align: center;
     background-color:rgba(167, 157, 157, 0.2);
     width: 100px;

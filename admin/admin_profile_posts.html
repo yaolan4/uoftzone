@@ -3,9 +3,11 @@
  
  <head>
    <meta charset="utf-8">
-   <title>CSC309 team54 project admin profile</title>
+   <title>CSC309 team54 project admin profile:posts</title>
    <link rel="stylesheet" type="text/css" href="admin_profile_posts.css">
  </head>
+
+ <div id="wrapper">
  <body>
     <div id = "header">
          <h1>UofT Zone</h1>
@@ -63,29 +65,38 @@
                               Post title
                         </th>
                         <th>
+                              # of Times Being Reported
+                        </th>
+                        <th>
                             Remove
                         </th>
                   </tr>
                   <tr>
                         <td>
-                              Walter White
+                              user
                         </td>
                         <td>
                             U of T is a great place!
                         </td>
                         <td>
-                              <button class = "check" type="button"></button>
+                              1
+                        </td>
+                        <td>
+                              <button class = "check" name = "white" type="button"></button>
                         </td>
                   </tr>
                   <tr>
                         <td>
-                               Skyler White
+                               user
                         </td>
                         <td>
                             Free food at BA, come and pick up guys it is free!!!
                         </td>
                         <td>
-                              <button class = "check" type="button"></button>
+                              0
+                        </td>
+                        <td>
+                              <button class = "check" name = "white" type="button"> </button>
                         </td>
                   </tr>
             <tbody>
@@ -96,8 +107,12 @@
 
 
 
+  <br><br>
+
+
+  <script type="text/javascript" src="admin_profile.js"></script>
 
  </body>
-
+ </div>
 
  </html>

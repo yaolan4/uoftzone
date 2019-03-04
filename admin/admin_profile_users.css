@@ -5,9 +5,15 @@ h1 {
     display: inline-block;
 }
 
+#wrapper{
+    width:  1900px;
+    margin: 0 auto;
+}
+
 body{
     font-family: "Comic Sans MS","Arial Black";
 }
+
 
 #logout{
     float:right;
@@ -26,7 +32,6 @@ body{
     height:45px;
     float:left;
 }
-
 #leftside{
     display: inline-block;
 }
@@ -105,13 +110,12 @@ body{
     height: 50px;
     transform: perspective(5px) rotateX(1deg);
     transform-origin: bottom left;
-    margin-left: 50px;
+    margin-left:50px;
     margin-top:40px;
     background: white;
     border: 3px solid #A9A9A9;
     background-color:  grey;
     display: inline-block
-    /**border:2px solid #A9A9A9;*/
     
 
 
@@ -180,7 +184,7 @@ td,th{
 .remove{
     position: relative;
     top:30px;
-    left:600px;
+    left:550px;
     text-align: center;
     background-color:rgba(167, 157, 157, 0.2);
     width: 100px;
