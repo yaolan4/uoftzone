@@ -185,13 +185,11 @@ function changeRemoveButton(button){
         if (checkpoint.innerText ==  "# of Posts" ){
             toremove = button.parentElement.parentElement.children[0].innerText
             removeUsers.push(toremove);
-            console.log(removeUsers)
 
     
         } else{
             toremove = button.parentElement.parentElement.children[1].innerText
             removePosts.push(toremove);
-            console.log(removePosts)
 
     
         }
@@ -208,13 +206,12 @@ function changeRemoveButton(button){
             toremove = button.parentElement.parentElement.children[0].innerText
             index = removeUsers.indexOf(toremove)
             removeUsers.splice(index,1);
-            console.log(removeUsers)
+
     
         } else{
             toremove = button.parentElement.parentElement.children[1].innerText
             index =removePosts.indexOf(toremove);
             removePosts.splice(index,1);
-            console.log(removePosts)
         }
     }
 
@@ -237,8 +234,6 @@ function removeall(){
                 users.splice(index,1);
                 numberOfUsers--;
                 i--;
-                console.log(users)
-                console.log(usernames)
                 
             }
         }
@@ -255,8 +250,7 @@ function removeall(){
                 posts.splice(index,1)
                 numberOfPosts--;
                 i--;
-                console.log(posts)
-                console.log(posttitles)
+
             }
         }
 
