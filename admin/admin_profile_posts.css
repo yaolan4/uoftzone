@@ -14,6 +14,15 @@ body{
     font-family: "Comic Sans MS","Arial Black";
 }
 
+
+.mainpageButton{
+    background-color: white;
+    border:none;
+    outline: 0 none;
+    cursor: pointer;
+
+}
+
 #logout{
     float:right;
     margin-top:20px;
@@ -23,6 +32,8 @@ body{
 .logoutButton{
     background-color:black;
     color:white;
+    outline: 0 none;
+    cursor: pointer;
 }
 
 .buttonIconContainer  {
@@ -72,6 +83,8 @@ body{
     width: 300px;
     height:50px;
     font-family: "Comic Sans MS","Arial Black";
+    outline: 0 none;
+    cursor: pointer;
 
 }
 
@@ -89,6 +102,8 @@ body{
     width: 300px;
     height:50px;
     font-family: "Comic Sans MS","Arial Black";
+    outline: 0 none;
+    cursor: pointer;
 
 }
 
@@ -115,7 +130,6 @@ body{
     background: white;
     border: 3px solid #A9A9A9;
     display: inline-blcok;
-    /**border:2px solid #A9A9A9;*/
     
 
 
@@ -195,5 +209,7 @@ td,th{
     width: 100px;
     height:30px;
     font-family: "Comic Sans MS","Arial Black";
+    outline: 0 none;
+
 
 }
