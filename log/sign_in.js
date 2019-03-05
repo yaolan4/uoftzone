@@ -8,23 +8,31 @@ signIn.addEventListener('click', allClickEvents);
 
 // Functions that don't edit DOM themselves, but can call DOM functions
 function allClickEvents(e) {
-    // e.preventDefault();
-    console.log(e.target);
+    //e.preventDefault();
     if (e.target.id === 'submitButton' || e.target.id === 'submitLink') {
         //match the user and pswd through server
         console.log('username is ' + username.value + 'password is ' + password.value);
-        if ((username.value === 'user' && password.value === 'user') || username.value === 'admin' && password.value === 'admin') {
+ 
+        if (username.value === 'user' && password.value === 'user')  {
             const a = document.querySelector('#submitLink');
             a.setAttribute("href", "../main_sections/logged_q.html");
-            console.log('logged in')
-        } else {
+
+            console.log('user logged in')
+        } else if (username.value === 'admin' && password.value === 'admin'){
+            const a = document.querySelector('#submitLink');
+            a.setAttribute("href", "../main_sections/admin_q.html");
+
+            console.log('admin logged in')
+
+        } else{
             //prompt user username and password does not match or username does not exist
             //manipulate dom to let users know that log in not successful
             console.log('log in not successful');
-            if (!signIn.lastElementChild.classList.contains('red')) {
-                loginNotSuccessful();
+             
+             if (!signIn.lastElementChild.classList.contains('red')) {
+                    loginNotSuccessful();
             }
-
+                
         }
     }
 }

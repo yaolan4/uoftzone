@@ -29,9 +29,6 @@
     width: 300px;
 }
 
-.signupForm {
-
-}
 
 .form {
     padding-bottom: 30px;
@@ -68,4 +65,9 @@ input[type=text]:focus {
 a{
     text-decoration: none;
     color: #ffffff;
+}
+
+.red {
+    color: red;
+    font-family: Comic Sans MS;
 }
