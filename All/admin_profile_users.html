@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+ <head>
+   <meta charset="utf-8">
+   <title>CSC309 team54 project admin profile:users</title>
+   <link rel="stylesheet" type="text/css" href="admin_profile_users.css">
+ </head>
+
+ <div id="wrapper">
+     
+ <body>
+
+     
+    <div id = "header">
+         <h1>UofT Zone</h1>
+         <div id = "logout">
+            <button class = "logoutButton" type="button">
+               <div class="buttonIconContainer">
+                     <img class = "personIcon" src = "person.png" />
+               </div>
+               <div class = "logoutContent">
+                     <h4 > LOG OUT</h4>
+               </div>
+            </button>
+
+         </div>
+         <hr color = grey>
+   </div>
+   
+   <div id = "leftside">
+      <div id = "profilePic">
+         <img class = "profilePicture" src = "empty.png" />
+
+      </div>
+
+     <div id = "profileInf">
+         <p>Username:<span>Admin</span></p>
+         <p>Email:<span></span></p>
+         <button class = "edit" type="button">Edit</button>
+
+      </div>
+
+      <div id = "changePassword">
+         <button class = "change" type="button">Change My Password</button>
+      </div>
+
+  </div>
+
+  <div id = "usersAndposts">
+      <div class = allUsers>
+            <button class = "allUsersButton" type="button" onclick= "window.location.href= 'admin_profile_users.html'"><strong >All Users</strong></button>
+      </div>
+              
+              
+      <div class = allPosts>
+             <button class = "allPostsButton" type="button" onclick= "window.location.href= 'admin_profile_posts.html'"><strong>All Posts</strong></button>
+      </div>
+
+
+      <table id='usersTable'>
+            <tbody>
+                  <tr>
+                        <th>
+                              User Name 
+                        </th>
+                        <th>
+                              # of Posts
+                        </th>
+                        <th>
+                             # of Times Being Reported
+                        </th>
+                        <th>
+                            Remove
+                        </th>
+                  </tr>
+                  <tr>
+                        <td>
+                              user
+                        </td>
+                        <td>
+                                    2
+                        </td>
+                        <td>
+                                    1
+                        </td>
+                        <td>
+                              <button class = "check" name = "white" type="button"></button>
+                        </td>
+                  </tr>
+                  <tr>
+                        <td>
+                               user2
+                        </td>
+                        <td>
+                              0
+                        </td>
+                        <td>
+                               0
+                         </td>
+                        <td>
+                              <button class = "check" name = "white"  type="button"></button>
+                        </td>
+                  </tr>
+            <tbody>
+      </table>
+
+      <button class = "remove" type="button">REMOVE</button>
+
+
+
+  <br><br>
+
+
+  <script type="text/javascript" src="admin_profile.js"></script>
+
+
+</div>
+
+ </body>
+</div>
+
+ </html>
