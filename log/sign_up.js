@@ -8,7 +8,7 @@ signUp.addEventListener('click', allClickEvents);
 
 // Functions that don't edit DOM themselves, but can call DOM functions
 function allClickEvents(e) {
-    e.preventDefault();
+    // e.preventDefault();
 
     if(e.target.id === 'submit') {
         console.log('sugn up submit');

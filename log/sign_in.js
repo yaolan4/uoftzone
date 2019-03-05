@@ -8,14 +8,14 @@ signIn.addEventListener('click', allClickEvents);
 
 // Functions that don't edit DOM themselves, but can call DOM functions
 function allClickEvents(e) {
-    e.preventDefault();
-
-    if (e.target.id === 'submit') {
+    // e.preventDefault();
+    console.log(e.target);
+    if (e.target.id === 'submitButton' || e.target.id === 'submitLink') {
         //match the user and pswd through server
         console.log('username is ' + username.value + 'password is ' + password.value);
         if ((username.value === 'user' && password.value === 'user') || username.value === 'admin' && password.value === 'admin') {
-            const a = document.querySelector('#loggedIn');
-            a.setAttribute("href", "./main_sections/logged_q.html");
+            const a = document.querySelector('#submitLink');
+            a.setAttribute("href", "../main_sections/logged_q.html");
             console.log('logged in')
         } else {
             //prompt user username and password does not match or username does not exist
@@ -26,8 +26,6 @@ function allClickEvents(e) {
             }
 
         }
-    } else if (e.target.id === 'cancel') {
-
     }
 }
 
