@@ -71,7 +71,7 @@ addPost()
 
 /**call other external data functions to test their functionality */
 getReported()
-updateName()
+
 
 /**Local use functions */
 /**The following functions does not need external severs data
@@ -152,24 +152,14 @@ function getReported(){
 
 }
 
-function updateName(){
-    // Get the user whose user name is updated from server
-    // code below requires server call
-    //We use mock user for phase 1 instead
-    //Assume user3 change its name to user4
-    user = users[2]
-    newName = "user4"
-
-    //call DOM function 
-    if (document.title == "CSC309 team54 project admin profile:users"){
-        updateNameUser(user,newName) 
-    }else if (document.title == "CSC309 team54 project admin profile:posts"){
-         updateNamePost(user,newName) 
-    }
-
-    user.name = newName
-
+function updateEmail(){
+    //Get the email and the user who change their email from server
+    //suppose user1 change their email
+    newEmail = "dadasd@qdsadasd.com"
+    user[0].email = newEmail
 }
+
+
 
 
 
@@ -342,7 +332,6 @@ function addNewPost(post){
 }
 
 function addUserReportNum(user){
-    name = user.name
     numReport = user.numOfReported
     index = users.indexOf(user)
     userRow = tableEntries.children[0].children[index+1]
@@ -351,7 +340,6 @@ function addUserReportNum(user){
 
 }
 function addPostReportNum(post) {
-    name = post.username
     numReport = post.numOfReported
     index = posts.indexOf(post)
     postRow = tableEntries.children[0].children[index+1]
@@ -360,21 +348,5 @@ function addPostReportNum(post) {
 }
 
 
-function updateNameUser(user,newName) {
-    index = users.indexOf(user)
-    userRow = tableEntries.children[0].children[index+1]
-    userRow.children[0].innerText = newName
 
-}
-    
-function updateNamePost(user,newName) {
-    name = user.name
-    for (i = 1; i < tableEntries.children[0].childElementCount ; i++) {
-        username = tableEntries.children[0].children[i].children[0].innerText
-        if (username == name){
-            tableEntries.children[0].children[i].children[0].innerText = newName
 
-        }
-    }
-
-}
