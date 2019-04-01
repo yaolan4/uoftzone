@@ -1,5 +1,14 @@
 const mongoose = require('mongoose');
 
+const PostSchema = new mongoose.Schema({
+    likes: Number,
+    reported: Number,
+    replies: [PostSchema],
+    poster: UserSchema,
+    postContent: String,
+    category: String
+});s
+
 const UserSchema = new mongoose.Schema({
     name: String,
     email: String,
