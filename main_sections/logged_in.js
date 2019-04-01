@@ -72,6 +72,7 @@ function allClickEvents(e) {
     }
     else if (e.target.classList.contains('feedbackButton')) {
         if (e.target.innerText == 'Report') {
+            e.target.innerText = 'Unreport'
             for (let i = 0; i < posts.length; i++) {
                 if ((users[posts[i].posterID].userName ==
                     e.target.parentElement.parentElement.children[1].innerText) &&
@@ -79,6 +80,18 @@ function allClickEvents(e) {
                         e.target.parentElement.parentElement.children[2].innerText) &&
                     posts[i].category == page) {
                     posts[i].reported++;
+                }
+            }
+        }
+        else if (e.target.innerText == 'Unreport') {
+            e.target.innerText = 'Report'
+            for (let i = 0; i < posts.length; i++) {
+                if ((users[posts[i].posterID].userName ==
+                    e.target.parentElement.parentElement.children[1].innerText) &&
+                    (posts[i].postContent ==
+                        e.target.parentElement.parentElement.children[2].innerText) &&
+                    posts[i].category == page) {
+                    posts[i].reported--;
                 }
             }
         }
@@ -156,16 +169,19 @@ function addPostToPostBox(post) {
 
     const feedback = document.createElement('form');
     feedback.className = 'feedback';
-    const like = document.createElement('button');
-    like.className = 'feedbackButton';
-    like.appendChild(document.createTextNode('Like'));
+     const likelink = document.createElement('a');
+    likelink.href = "";
+    const likeimage = document.createElement('img');
+    likeimage.className = 'unlike';
+    likeimage.src = 'unlike.jpg';
+    likelink.appendChild(likeimage);
     const reply = document.createElement('button');
     reply.className = 'feedbackButton';
     reply.appendChild(document.createTextNode('Reply'));
     const report = document.createElement('button');
     report.className = 'feedbackButton';
     report.appendChild(document.createTextNode('Report'));
-    feedback.appendChild(like);
+    feedback.appendChild(likelink);
     feedback.appendChild(reply);
     feedback.appendChild(report);
 
@@ -224,16 +240,19 @@ function addReplyPost(target, post) {
 
     const feedback = document.createElement('form');
     feedback.className = 'feedback';
-    const like = document.createElement('button');
-    like.className = 'feedbackButton';
-    like.appendChild(document.createTextNode('Like'));
+    const likelink = document.createElement('a');
+    likelink.href = "";
+    const likeimage = document.createElement('img');
+    likeimage.className = 'unlike';
+    likeimage.src = 'unlike.jpg';
+    likelink.appendChild(likeimage);
     const reply = document.createElement('button');
     reply.className = 'feedbackButton';
     reply.appendChild(document.createTextNode('Reply'));
     const report = document.createElement('button');
     report.className = 'feedbackButton';
     report.appendChild(document.createTextNode('Report'));
-    feedback.appendChild(like);
+    feedback.appendChild(likelink);
     feedback.appendChild(reply);
     feedback.appendChild(report);
 
