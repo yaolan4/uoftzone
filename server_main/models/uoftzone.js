@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const PostSchema = new mongoose.Schema({
     likes: Number,
     reported: Number,
-    replies: [PostSchema],
+    replies: [this],
     poster: String,
     postContent: String,
     category: String
