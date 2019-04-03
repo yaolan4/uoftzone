@@ -1,4 +1,10 @@
 
+.profileBox {
+	float: left;
+	margin-left: 1000px;
+	font-size: 30px;
+	margin-top: 15px;
+}
 
 #loginBox {
 	height: 100px;
@@ -14,12 +20,7 @@
 	font-family: Comic Sans MS
 }
 
-.profileBox {
-	float: left;
-	margin-left: 1000px;
-	font-size: 30px;
-	margin-top: 15px;
-}
+
 
 .profileImage {
 	width: 50px;

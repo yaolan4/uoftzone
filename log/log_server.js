@@ -36,7 +36,7 @@ app.use(session({
 
 // Add middleware to check for logged-in users
 const sessionChecker = (req, res, next) => {
-    if (req.session.user) {
+    if (req.session.user || req.session.admin) {
         res.redirect('dashboard')
     } else {
         next();
@@ -61,6 +61,23 @@ app.post('/users', (req, res) => {
     })
 
     user.save().then((result) => {
+        res.send(result)
+    }, (error) => {
+        res.status(400).send(error) // 400 for bad request
+    })
+})
+
+app.post('/admins', (req, res) => {
+    // Add code here
+
+    const admin =  new Admin ({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
+        //creator: req.user._id // from the authenticate middleware
+    })
+
+    admin.save().then((result) => {
         res.send(result)
     }, (error) => {
         res.status(400).send(error) // 400 for bad request
@@ -102,23 +119,51 @@ app.post('/login/user', (req, res) => {
     const password = req.body.password
     log('name pswd: ' + typeof name + typeof password)
 
-    User.findByNamePassword(name, password).then((user) => {
-        if(!user) {
-            log('no matching user :(')
-            res.redirect('/login')
-        } else {
-            // Add the user to the session cookie that we will
-            // send to the client
-            req.session.user = user._id;
-            req.session.name = user.name
-            log('found user :)')
-            res.redirect('/dashboard')
-        }
-    }).catch((error) => {
-        log(error)
-        res.status(400).send(error)
-    })
+    if (name.toLowerCase().includes('user')) {
+        User.findByNamePassword(name, password).then((user) => {
+            if (!user) {
+                log('no matching user :(')
+                res.redirect('/login')
+            } else {
+                // Add the user to the session cookie that we will
+                // send to the client
+                req.session.user = user._id;
+                req.session.name = user.name
+                log('found user :)')
+                res.redirect('/dashboard')
+            }
+        }).catch((error) => {
+            log(error)
+            res.status(400).send(error)
+        })
+    } else {
+        Admin.findByNamePassword(name, password).then((admin) => {
+            if(!admin) {
+                log('no matching admin :(')
+                res.redirect('/login')
+            } else {
+                // Add the user to the session cookie that we will
+                // send to the client
+                req.session.admin = admin._id;
+                req.session.name = admin.name
+                log('found admin :)')
+                res.redirect('/dashboard')
+            }
+        }).catch((error) => {
+            log(error)
+            res.status(400).send(error)
+        })
+    }
 })
+
+// //admin log in
+// app.post('/login/admin', (req, res) => {
+//     const name = req.body.name
+//     const password = req.body.password
+//     log('name pswd: ' + typeof name + typeof password)
+//
+//
+// })
 
 app.get('/users/logout', (req, res) => {
     req.session.destroy((error) => {
@@ -138,7 +183,7 @@ app.route('/dashboard')
     })
 
 // Middleware for authentication for resources
-const authenticate = (req, res, next) => {
+const authenticateUser = (req, res, next) => {
     if (req.session.user) {
         User.findById(req.session.user).then((user) => {
             if (!user) {
@@ -148,10 +193,28 @@ const authenticate = (req, res, next) => {
                 next()
             }
         }).catch((error) => {
-            res.redirect('/login')
+            res.redirect('/')
         })
     } else {
-        res.redirect('/login')
+        res.redirect('/')
+    }
+}
+
+// Middleware for authentication for resources
+const authenticateAdmin = (req, res, next) => {
+    if (req.session.user) {
+        Admin.findById(req.session.admin).then((admin) => {
+            if (!admin) {
+                return Promise.reject()
+            } else {
+                req.admin = admin
+                next()
+            }
+        }).catch((error) => {
+            res.redirect('/')
+        })
+    } else {
+        res.redirect('/')
     }
 }
 
