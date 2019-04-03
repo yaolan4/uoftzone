@@ -84,17 +84,6 @@ app.post('/admins', (req, res) => {
     })
 })
 
-//Get all users
-app.get('/users', (req, res) => {
-    User.find().then((users) => {
-        res.send({ users}) // put in object in case we want to add other properties
-    }, (error) => {
-        res.status(500).send(error)
-    })
-
-
-})
-
 // route for index
 app.route('/index')
     .get((req, res) => {
@@ -165,7 +154,7 @@ app.post('/login/user', (req, res) => {
 //
 // })
 
-app.get('/users/logout', (req, res) => {
+app.get('/users/logout',  (req, res) => {
     req.session.destroy((error) => {
         if (error) {
             res.status(500).send(error)
@@ -202,7 +191,7 @@ const authenticateUser = (req, res, next) => {
 
 // Middleware for authentication for resources
 const authenticateAdmin = (req, res, next) => {
-    if (req.session.user) {
+    if (req.session.admin) {
         Admin.findById(req.session.admin).then((admin) => {
             if (!admin) {
                 return Promise.reject()
@@ -217,6 +206,19 @@ const authenticateAdmin = (req, res, next) => {
         res.redirect('/')
     }
 }
+
+//use what's in admin_server to check authentication of admin_Server
+//Get all users
+app.get('/users', authenticateAdmin, (req, res) => {
+    log('I have reached here')
+    User.find().then((users) => {
+        res.send({ users}) // put in object in case we want to add other properties
+    }, (error) => {
+        res.status(500).send(error)
+    })
+
+
+})
 
 app.listen(port, () => {
     log(`Listening on port ${port}...`)
