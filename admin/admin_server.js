@@ -50,7 +50,6 @@ app.get('/admin/logout', (req, res) => {
 
 app.post('/users', (req, res) => {
 	// Add code here
-
 	const user =  new User ({
         name: req.body.name,
         email: req.body.email,
@@ -68,6 +67,7 @@ app.post('/users', (req, res) => {
 
 //Get all users
 app.get('/users', (req, res) => {
+	log('I have reached here')
 	User.find().then((users) => {
 		res.send({ users}) // put in object in case we want to add other properties
 	}, (error) => {
@@ -120,6 +120,7 @@ app.post('/posts', (req, res) => {
 
 //Get all posts
 app.get('/posts', (req, res) => {
+	log('I have reached here')
 	Post.find().then((posts) => {
 		res.send({ posts}) 
 	}, (error) => {
