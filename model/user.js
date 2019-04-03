@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
+const { Post } = require('./post')
 
 const PostSchema = new mongoose.Schema({
     likes: Number,
     reported: Number,
-    replies: [PostSchema],
-    poster: UserSchema,
+    replies: [this],
+    poster: String,
     postContent: String,
     category: String
-});s
+});
 
 const UserSchema = new mongoose.Schema({
     name: String,
@@ -16,6 +17,8 @@ const UserSchema = new mongoose.Schema({
     posts: [PostSchema],
     reported:Number
 });
+
+
 
 const User = mongoose.model('User', UserSchema)
 

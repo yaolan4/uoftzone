@@ -13,9 +13,9 @@
 
      
     <div id = "header">
-         <button class = "mainpageButton" type="button" onclick= "window.location.href='../main_sections/admin_q.html'"><h1>UofT Zone</h1></button>
+         <button class = "mainpageButton" type="button" onclick= 'window.location = "/admin"'><h1>UofT Zone</h1></button>
          <div id = "logout">
-            <button class = "logoutButton" type="button" onclick= "window.location.href='../main_sections/index.html'">
+            <button class = "logoutButton" type="button" onclick='window.location = "/admin/logout"'>
                <div class="buttonIconContainer">
                      <img class = "personIcon" src = "person.png" />
                </div>
@@ -37,24 +37,24 @@
      <div id = "profileInf">
          <p>Username:<span>Admin</span></p>
          <p>Email:<span></span></p>
-         <button class = "edit" type="button" onclick= "window.location.href='../log/change_email_admin.html'">Edit Email</button>
+         <button class = "edit" type="button" onclick= 'window.location = "/admin/change_email"'>Edit Email</button>
 
       </div>
 
       <div id = "changePassword">
-         <button class = "change" type="button" onclick= "window.location.href='../log/change_pswd_admin.html'">Change My Password</button>
+         <button class = "change" type="button" onclick= "window.location='/admin/change_password'">Change My Password</button>
       </div>
 
   </div>
 
   <div id = "usersAndposts">
       <div class = allUsers>
-            <button class = "allUsersButton" type="button" onclick= "window.location.href= 'admin_profile_users.html'"><strong >All Users</strong></button>
+            <button class = "allUsersButton" type="button" onclick= "window.location = '/admin_profile'"><strong >All Users</strong></button>
       </div>
               
               
       <div class = allPosts>
-             <button class = "allPostsButton" type="button" onclick= "window.location.href= 'admin_profile_posts.html'"><strong>All Posts</strong></button>
+             <button class = "allPostsButton" type="button" onclick= "window.location = '/admin_profile2'"><strong>All Posts</strong></button>
       </div>
 
 
@@ -73,20 +73,6 @@
                         <th>
                             Remove
                         </th>
-                  </tr>
-                  <tr>
-                        <td>
-                              user
-                        </td>
-                        <td>
-                                    2
-                        </td>
-                        <td>
-                                    1
-                        </td>
-                        <td>
-                              <button class = "check" name = "white" type="button"></button>
-                        </td>
                   </tr>
                   <tr>
                         <td>

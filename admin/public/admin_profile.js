@@ -1,76 +1,26 @@
-/* admin js for team 54 project */
-let numberOfUsers = 0;
-let numberOfPosts = 0;
-// global arrays
-const users = [] // Array of users
-const posts = [] // Array of posts
+
 const removeUsers = []  //Array of Users to remove
 const removePosts = [] //Array of posts to remove
-const usernames = [] //Array of Usersnames
-const posttitles = [] // Array of post titles
 
+log = console.log
 
-//The user class
-class User {
-	constructor(name,password,email) {
-		this.name = name
-		this.password = password
-		this.email = email
-
-		// set user's posts and times of reported to 0
-        this.numOfPosts = 0;
-        this.numOfReported = 0;
-		numberOfUsers++;
-	}
-
-
-}
-
-//The post class
-class Post {
-	constructor(username,title) {
-		this.username = username
-		this.title = title
-
-		// set times of being reported to 0
-        this.numOfReported = 0;
-		numberOfPosts++;
-	}
-}
 
 //Get DOM from html 
 const tableEntries = document.querySelector('#usersTable')
 const removeEntries = document.querySelector('#usersAndposts')
+var posts
+var users
 
 //Entries wait for events
 tableEntries.addEventListener('click', changeRemoveStatus)
 removeEntries.addEventListener('click', remove)
 
 
-/** Add data to global array
- user3 is added by calling addUser
- post3 is added by calling addPost
- */
-user1 = new User('user', 'user', '')
-user1.numOfPosts = 2
-user1.numOfReported = 1
-users.push(user1);
-users.push(new User('user2', 'user2', ''));
-usernames.push("user")
-usernames.push("user2")
 
-post1 = new Post('user','U of T is a great place!')
-post1.numOfReported  = 1
-posts.push(post1)
-posts.push(new Post('user','Free food at BA, come and pick up guys it is free!'))
-posttitles.push('U of T is a great place!')
-posttitles.push('Free food at BA, come and pick up guys it is free!')
 
-addUser() 
-addPost() 
 
-/**call other external data functions to test their functionality */
-getReported()
+/**call get function at beginning to get all data */
+getUsersOrPosts()
 
 
 /**Local use functions */
@@ -87,6 +37,7 @@ function changeRemoveStatus(e) {
 function remove(e) {
     e.preventDefault();
     if (e.target.classList.contains('remove') ) {
+        deleteInDB()
         removeall()
 
     }
@@ -95,69 +46,116 @@ function remove(e) {
 
 /**External data functions */
 /**The following functions  need obtain external severs data first
- and can not be functional just using local data
 */
-function addUser(){
-     // Get a new user information from server
-     // code below requires server call
-     //We use mock user for phase 1 instead
-     user = new User('user3', 'user3', 'user3');
-     usernames.push(user.name);
-     users.push(user);
-
-     //call DOM function 
-     if (document.title == "CSC309 team54 project admin profile:users"){
-        addNewUser(user);
-     }
-
-}
-
-function addPost(){
-    // Get a new post information from server
-    // code below requires server call
-    //We use mock user for phase 1 instead
-    post = new Post('user3', 'Find a new nice place');
-    posttitles.push(post.title);
-    posts.push(post);
-    index = usernames.indexOf(post.username)
-
-    //call DOM function 
+function deleteInDB(){
     if (document.title == "CSC309 team54 project admin profile:users"){
-        users[index].numOfPosts++
-        addPostNum(users[index]) 
+        for (i = 1; i < tableEntries.children[0].childElementCount ; i++) {
+            username = tableEntries.children[0].children[i].children[0].innerText
+            //users = getUsersOrPosts()
+            //console.log(users)
+            same = users.filter(user => user.name == username)
+            //console.log(same)
+            if (removeUsers.includes(username) && same.length > 0){
+                user = same[0]
+                log(user)
+                deleteUsersOrPosts(user._id)
+
+            }
+        }
     }else if (document.title == "CSC309 team54 project admin profile:posts"){
-        addNewPost(post) 
+        for (i = 1; i < tableEntries.children[0].childElementCount ; i++) {
+            id = tableEntries.children[0].children[i].children[0].innerText
+            //users = getUsersOrPosts()
+            //console.log(users)
+            same = posts.filter(post => post._id == id)
+            //console.log(same)
+            if (removePosts.includes(id) && same.length > 0){
+                post = same[0]
+                log(post)
+                deleteUsersOrPosts(post._id)
+
+            }
+        }
     }
 
 }
 
-function getReported(){
-    // Get the post being reported from server
-    // code below requires server call
-    //We use mock user for phase 1 instead
-    //Assume post2 is get reported by some user
-    post = posts[1]
 
-    index = usernames.indexOf(post.username)
-    post.numOfReported++
-    users[index].numOfReported++
-
-    //call DOM function 
+function getUsersOrPosts() {
+    var url
     if (document.title == "CSC309 team54 project admin profile:users"){
-        addUserReportNum(users[index]) 
+        url = '/users';
     }else if (document.title == "CSC309 team54 project admin profile:posts"){
-        addPostReportNum(post) 
+        url = '/posts';
     }
 
 
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            alert('Could not get students')
+       }                
+    })
+    .then((json) => {
+        if (document.title == "CSC309 team54 project admin profile:users"){
+            json.users.map((u) => addNewUser(u) )
+            users =  json.users
+            console.log(users)
+        }else if (document.title == "CSC309 team54 project admin profile:posts"){
+            json.posts.map((u) =>addNewPost(u) )
+            posts = json.posts
+            console.log(posts)
+        }
+
+
+        
+    }).catch((error) => {
+        console.log(error)
+    })
 }
 
-function updateEmail(){
-    //Get the email and the user who change their email from server
-    //suppose user1 change their email
-    newEmail = "dadasd@qdsadasd.com"
-    user[0].email = newEmail
+
+function deleteUsersOrPosts(id) {
+    var url
+    if (document.title == "CSC309 team54 project admin profile:users"){
+        url = '/users/' + id;
+    }else if (document.title == "CSC309 team54 project admin profile:posts"){
+        url = '/posts/' + id;
+    }
+
+
+    fetch(url, {
+        method: 'delete'
+    })
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            alert('Could not get students')
+       }                
+    })
+    .then((json) => {
+        if (document.title == "CSC309 team54 project admin profile:users"){
+            console.log(json)
+          
+        }else if (document.title == "CSC309 team54 project admin profile:posts"){
+            console.log(json)
+         
+        }
+
+        
+    }).catch((error) => {
+        console.log(error)
+    })
 }
+
+
+
+
+
+
 
 
 
@@ -178,7 +176,7 @@ function changeRemoveButton(button){
 
     
         } else{
-            toremove = button.parentElement.parentElement.children[1].innerText
+            toremove = button.parentElement.parentElement.children[0].innerText
             removePosts.push(toremove);
 
     
@@ -217,28 +215,20 @@ function removeall(){
             if (removeUsers.includes(username)){
                 toremove = tableEntries.children[0].children[i]
                 tableEntries.children[0].removeChild(toremove)
-                index = removeUsers.indexOf(username);
+                index =removeUsers.indexOf(username);
                 removeUsers.splice(index,1);
-                index = usernames.indexOf(username)
-                usernames.splice(index,1)
-                users.splice(index,1);
-                numberOfUsers--;
                 i--;
                 
             }
         }
     }else{
         for (i = 1; i < tableEntries.children[0].childElementCount ; i++) {
-           posttitle = tableEntries.children[0].children[i].children[1].innerText
-            if (removePosts.includes(posttitle)){
+           postid = tableEntries.children[0].children[i].children[0].innerText
+            if (removePosts.includes(postid)){
                 toremove = tableEntries.children[0].children[i]
                 tableEntries.children[0].removeChild(toremove)
-                index =removePosts.indexOf(posttitle);
+                index =removePosts.indexOf(postid);
                 removePosts.splice(index,1);
-                index = posttitles.indexOf(posttitle)
-                posttitles.splice(index,1)
-                posts.splice(index,1)
-                numberOfPosts--;
                 i--;
 
             }
@@ -251,8 +241,8 @@ function removeall(){
 
 function addNewUser(user){
     const name = user.name;
-    const postNum = user.numOfPosts;
-    const reportNum = user.numOfReported;
+    const postNum = user.posts.length;
+    const reportNum = user.reported;
 
     const tableRow = document.createElement('tr')
 
@@ -285,33 +275,30 @@ function addNewUser(user){
 	tableEntries.children[0].append(tableRow)
 }
 
-function addPostNum(user){
-    name = user.name
-    numPost = user.numOfPosts
-    index = users.indexOf(user)
-    userRow = tableEntries.children[0].children[index+1]
-    userRow.children[1].innerText = numPost
 
-}
+
 
 function addNewPost(post){
-    const name = post.username;
-    const title = post.title;
-    const reportNum = post.numOfReported;
+    //const name = post.poster;
+    const content = post.postContent;
+    const reportNum = post.reported
+    const id = post._id
 
     const tableRow = document.createElement('tr')
 
-    const nameLabel = document.createElement('td')
-	const nameText = document.createTextNode(name)
-
-	nameLabel.appendChild(nameText)
-	tableRow.appendChild(nameLabel)
+    
+    const idLabel = document.createElement('td')
+	const idText = document.createTextNode(id)
+	
+	idLabel.appendChild(idText)
+	tableRow.appendChild(idLabel)
 
 	const postLabel = document.createElement('td')
-	const postText = document.createTextNode(title)
+	const postText = document.createTextNode(content)
 	
 	postLabel.appendChild(postText)
-	tableRow.appendChild(postLabel)
+    tableRow.appendChild(postLabel)
+    
 
     const reportNumLabel = document.createElement('td')
 	const reportNumText = document.createTextNode(reportNum)
@@ -331,21 +318,6 @@ function addNewPost(post){
 
 }
 
-function addUserReportNum(user){
-    numReport = user.numOfReported
-    index = users.indexOf(user)
-    userRow = tableEntries.children[0].children[index+1]
-    userRow.children[2].innerText = numReport
-
-
-}
-function addPostReportNum(post) {
-    numReport = post.numOfReported
-    index = posts.indexOf(post)
-    postRow = tableEntries.children[0].children[index+1]
-    postRow.children[2].innerText = numReport
-
-}
 
 
 

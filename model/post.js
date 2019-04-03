@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-
+const { User } = require('./user')
 
 const PostSchema = new mongoose.Schema({
     likes: Number,
     reported: Number,
-    replies: [PostSchema],
-    poster: UserSchema,
+    replies: [this],
+    poster: String,
     postContent: String,
     category: String
 });

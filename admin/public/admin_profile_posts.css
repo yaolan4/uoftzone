@@ -171,6 +171,9 @@ body{
 table,td,th{
     border-collapse: collapse;
     border:2px solid #A9A9A9;
+    overflow: auto;
+  
+
 }
 
 table{
