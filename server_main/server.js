@@ -9,10 +9,21 @@ const { ObjectID } = require('mongodb')
 // Mongoose
 const { mongoose } = require('./db/mongoose');
 const { User, Admin, Post } = require('./models/uoftzone')
+const { User, Admin, Post } = require('./models/uoftZone')
 
 // Express
 const port = process.env.PORT || 3000
 const app = express();
+// body-parser middleware setup.  Will parse the JSON and convert to object
+app.use(bodyParser.json());
+// static js directory
+app.use("./js", express.static(__dirname + '/public'))
+
+app.patch('', (req, res) => {
+	log(req.body)
+
+
+})
 
 // route for root; redirect to login
 app.get('/', (req, res) => {
