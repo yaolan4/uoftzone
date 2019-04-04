@@ -9,7 +9,7 @@ const PostSchema = new mongoose.Schema({
     poster: String,
     postContent: String,
     category: String
-});
+},  { collection : 'Post' });
 
 const UserSchema = new mongoose.Schema({
     name: String,
@@ -17,10 +17,14 @@ const UserSchema = new mongoose.Schema({
     password: String,
     posts: [PostSchema],
     reported:Number
+<<<<<<< HEAD
+},  { collection : 'User' });
+=======
 });
 // Our own student finding function
 UserSchema.statics.findByNamePassword = function(name, password) {
     const User = this
+>>>>>>> bd0c47a300282d1828b5affa48358eecf64b7435
 
     return User.findOne({'name': name}).then((user) => {
         if (!user) {
@@ -72,4 +76,4 @@ UserSchema.pre('save', function(next) {
 
 const User = mongoose.model('User', UserSchema)
 
-module.exports = {User}
+module.exports = { User }

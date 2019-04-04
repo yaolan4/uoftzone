@@ -2,14 +2,14 @@
 const log = console.log
 const { MongoClient, ObjectID } = require('mongodb')
 // Connect to the local mongo database
-MongoClient.connect('mongodb://localhost:27017/StudentAPI', (error, client) => {
+MongoClient.connect('mongodb://localhost:27017/UTZoneAPI', (error, client) => {
 	if (error) {
 		log("Can't connect to mongo serber")
 	} else {
 		log('Connected to mongo server')
 	}
 
-	const db = client.db('UofTZoneAPI')
+	const db = client.db('UTZoneAPI')
 
 	// Create a collection and insert into it
 	// (it doesn't have to exist beforehand)
