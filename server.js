@@ -399,9 +399,9 @@ app.post('/posts/:id', (req, res) => {
 
 app.patch('/liked', async (req, res) => {
 
-    // if (!ObjectID.isValid(id)) {
-    //     res.status(404).send()
-    // }
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send()
+    }
     // find the id of the post
     let allposts = [];
     await Post.find().then((post) => {
@@ -442,9 +442,9 @@ app.patch('/liked', async (req, res) => {
 
 app.patch('/unliked', async (req, res) => {
 
-    // if (!ObjectID.isValid(id)) {
-    //     res.status(404).send()
-    // }
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send()
+    }
     // find the id of the post
     let allposts = [];
     await Post.find().then((post) => {
@@ -485,9 +485,9 @@ app.patch('/unliked', async (req, res) => {
 
 app.patch('/report', async (req, res) => {
 
-    // if (!ObjectID.isValid(id)) {
-    //     res.status(404).send()
-    // }
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send()
+    }
     // find the id of the post
     let allposts = [];
     await Post.find().then((post) => {
@@ -529,9 +529,9 @@ app.patch('/report', async (req, res) => {
 
 app.patch('/unreport', async (req, res) => {
 
-    // if (!ObjectID.isValid(id)) {
-    //     res.status(404).send()
-    // }
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send()
+    }
     // find the id of the post
     let allposts = [];
     await Post.find().then((post) => {
@@ -569,18 +569,14 @@ app.patch('/unreport', async (req, res) => {
     });
 
 })
-
+let curr_user = req.session.user
 app.get('/getCurrUser', (req, res) => {
-    User.find({_id: new ObjectID(curr_user)}).then(user => {
-        if (user) {
-            res.send(user[0])
-        }
-        else {
-            res.status(404).send()
-        }
-    }, (error) =>  {
-        log(error)
-    })
+    if (req.session.user) {
+        res.send(req.session.user) 
+    }
+    else {
+        res.status(404).send()
+    }
 })
 
 app.post('/addPost', async (req, res) => {
