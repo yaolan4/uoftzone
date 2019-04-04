@@ -274,7 +274,8 @@ app.post('/users', (req, res) => {
 	})
 
     user.save().then((result) => {
-		res.send(result)
+        res.redirect('/login')
+        // res.send(result)
 	}, (error) => {
 		res.status(400).send(error) // 400 for bad request
 	})

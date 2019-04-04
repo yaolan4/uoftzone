@@ -39,6 +39,7 @@ function userSignUp() {
                     signupSucceed.className = 'green';
                     signupSucceed.appendChild(document.createTextNode('Sign up successful'));
                     signUp.appendChild(signupSucceed);
+                    window.location.href = res.url;
                 }
             } else {
                 alert('sign up not successful')
