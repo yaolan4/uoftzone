@@ -63,19 +63,19 @@ function allClickEvents(e) {
     }
     else if (e.target.classList.contains('submitReply')) {
         let category = ''
-            if (path.includes('logged_q.html')) {
-                category = 'Q&A'
-            }
-            else if (path.includes('logged_b.html')) {
-                category = 'BookExchange'
-            }
-            else if (path.includes('logged_f.html')) {
-                category = 'FreeFood'
-            }
-            const post = {
-                postContent: e.target.parentElement.children[0].value,
-                category: category
-            }
+        if (path.includes('logged_q.html')) {
+            category = 'Q&A'
+        }
+        else if (path.includes('logged_b.html')) {
+            category = 'BookExchange'
+        }
+        else if (path.includes('logged_f.html')) {
+            category = 'FreeFood'
+        }
+        const post = {
+            postContent: e.target.parentElement.children[0].value,
+            category: category
+        }
         addReplyPost(e.target.parentElement.parentElement, post);
         e.target.parentElement.parentElement.removeChild(e.target.parentElement);
     }
@@ -89,18 +89,11 @@ function allClickEvents(e) {
         e.target.className = 'unlike';
         e.target.src = 'unlike.jpg';
         recordUnliking(e);
-    } else if (e.target.id ==='userIcon' || e.target.id ==='userSpan') {
+    } else if (e.target.id === 'userIcon' || e.target.id === 'userSpan') {
         goToUserProfile();
-    } else if (e.target.id === 'bTab' ) {
-        navigate('/admin_b');
-    } else if (e.target.id === 'fTab' ) {
-        navigate('/admin_f');
-    } else if (e.target.id === 'qTab' ) {
-        navigate('/admin_q');
-    } else if (e.target.id ==='adminIcon' || e.target.id ==='adminSpan') {
+    } else if (e.target.id === 'adminIcon' || e.target.id === 'adminSpan') {
         goToAdminProfile();
     }
-
 }
 
 function goToUserProfile() {
@@ -188,7 +181,7 @@ function recordLiking(e) {
     }
     // Create our request constructor with all the parameters we need
     const request = new Request(url, {
-        method: 'PATCH', 
+        method: 'PATCH',
         body: JSON.stringify(data),
         headers: {
             'Accept': 'application/json, text/plain, */*',
@@ -196,16 +189,16 @@ function recordLiking(e) {
         },
     });
     fetch(request)
-    .then((res) => {
-        // Handle response we get from the API
-        if (res.status == 200) {
-            log('Success')
-        }
-        else {
-            log('failed')
-        }
-        log(res)
-    }).catch((error) => {
+        .then((res) => {
+            // Handle response we get from the API
+            if (res.status == 200) {
+                log('Success')
+            }
+            else {
+                log('failed')
+            }
+            log(res)
+        }).catch((error) => {
         console.log(error)
     })
 }
@@ -233,7 +226,7 @@ function recordUnliking(e) {
     }
     // Create our request constructor with all the parameters we need
     const request = new Request(url, {
-        method: 'PATCH', 
+        method: 'PATCH',
         body: JSON.stringify(data),
         headers: {
             'Accept': 'application/json, text/plain, */*',
@@ -241,16 +234,16 @@ function recordUnliking(e) {
         },
     });
     fetch(request)
-    .then((res) => {
-        // Handle response we get from the API
-        if (res.status == 200) {
-            log('Success')
-        }
-        else {
-            log('failed')
-        }
-        log(res)
-    }).catch((error) => {
+        .then((res) => {
+            // Handle response we get from the API
+            if (res.status == 200) {
+                log('Success')
+            }
+            else {
+                log('failed')
+            }
+            log(res)
+        }).catch((error) => {
         console.log(error)
     })
 }
@@ -278,7 +271,7 @@ function recordReport(e) {
     }
     // Create our request constructor with all the parameters we need
     const request = new Request(url, {
-        method: 'PATCH', 
+        method: 'PATCH',
         body: JSON.stringify(data),
         headers: {
             'Accept': 'application/json, text/plain, */*',
@@ -286,23 +279,23 @@ function recordReport(e) {
         },
     });
     fetch(request)
-    .then((res) => {
-        // Handle response we get from the API
-        if (res.status == 200) {
-            log('Success')
-        }
-        else {
-            log('failed')
-        }
-        log(res)
-    }).catch((error) => {
+        .then((res) => {
+            // Handle response we get from the API
+            if (res.status == 200) {
+                log('Success')
+            }
+            else {
+                log('failed')
+            }
+            log(res)
+        }).catch((error) => {
         console.log(error)
     })
 
 }
 
 function recordUnreport(e) {
-     // get the necessary of the reported post data
+    // get the necessary of the reported post data
     let category = ''
     if (path.includes('logged_q.html')) {
         category = 'Q&A'
@@ -324,7 +317,7 @@ function recordUnreport(e) {
     }
     // Create our request constructor with all the parameters we need
     const request = new Request(url, {
-        method: 'PATCH', 
+        method: 'PATCH',
         body: JSON.stringify(data),
         headers: {
             'Accept': 'application/json, text/plain, */*',
@@ -332,101 +325,6 @@ function recordUnreport(e) {
         },
     });
     fetch(request)
-    .then((res) => {
-        // Handle response we get from the API
-        if (res.status == 200) {
-            log('Success')
-        }
-        else {
-            log('failed')
-        }
-        log(res)
-    }).catch((error) => {
-        console.log(error)
-    })
-}
-// DOM functions
-
-// This function adds the post to the postBox on the page that the user wants to post.
-function addPostToPostBox(post) {
-    //fetch a get url to get the information of the current logged in user. 
-    let url = '/getCurrUser';
-    fetch(url)
-    .then((res) => { 
-        if (res.status === 200) {
-           return res.json() 
-       } else {
-            alert('Could not get user')
-       }                
-    })
-    .then((json) => {
-        // adding dynamic html 
-        const split = document.createElement('div');
-        split.className = 'postSplit';
-        const thePost = document.createElement('div');
-        thePost.className = 'post';
-
-        const iconBox = document.createElement('div');
-        iconBox.className = 'posterIconBox';
-        const icon = document.createElement('img');
-        icon.className = 'posterIcon';
-        icon.src = "signicon.jpg";
-        iconBox.appendChild(icon);
-
-        const username = document.createElement('div');
-        username.className = 'userName';
-        const name = document.createTextNode(json.name);
-        username.appendChild(name);
-
-        const content = document.createElement('div');
-        content.className = 'postContent';
-        const contents = document.createTextNode(post.postContent);
-        content.appendChild(contents);
-
-        const feedback = document.createElement('form');
-        feedback.className = 'feedback';
-         const likelink = document.createElement('a');
-        likelink.href = "";
-        const likeimage = document.createElement('img');
-        likeimage.className = 'unlike';
-        likeimage.src = 'unlike.jpg';
-        likelink.appendChild(likeimage);
-        const reply = document.createElement('button');
-        reply.className = 'feedbackButton';
-        reply.appendChild(document.createTextNode('Reply'));
-        const report = document.createElement('button');
-        report.className = 'feedbackButton';
-        report.appendChild(document.createTextNode('Report'));
-        feedback.appendChild(likelink);
-        feedback.appendChild(reply);
-        feedback.appendChild(report);
-
-        postBody.appendChild(split);
-        thePost.appendChild(iconBox);
-        thePost.appendChild(username);
-        thePost.appendChild(content);
-        thePost.appendChild(feedback);
-        postBody.appendChild(thePost);
-
-        // fetch a url to save the new post
-        const newpost = {
-            likes: 0,
-            reported: 0,
-            replies: [],
-            poster: json._id,
-            postContent: post.postContent,
-            category: post.category
-        }
-        url = '/addPost';
-        const request = new Request(url, {
-        method: 'POST', 
-        body: JSON.stringify(newpost),
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        },
-        });
-        return fetch(request)
         .then((res) => {
             // Handle response we get from the API
             if (res.status == 200) {
@@ -437,13 +335,109 @@ function addPostToPostBox(post) {
             }
             log(res)
         }).catch((error) => {
-            console.log(error)
+        console.log(error)
+    })
+}
+
+// DOM functions
+
+// This function adds the post to the postBox on the page that the user wants to post.
+function addPostToPostBox(post) {
+    //fetch a get url to get the information of the current logged in user. 
+    let url = '/getCurrUser';
+    fetch(url)
+        .then((res) => {
+            if (res.status === 200) {
+                return res.json()
+            } else {
+                alert('Could not get user')
+            }
         })
+        .then((json) => {
+            // adding dynamic html
+            const split = document.createElement('div');
+            split.className = 'postSplit';
+            const thePost = document.createElement('div');
+            thePost.className = 'post';
+
+            const iconBox = document.createElement('div');
+            iconBox.className = 'posterIconBox';
+            const icon = document.createElement('img');
+            icon.className = 'posterIcon';
+            icon.src = "signicon.jpg";
+            iconBox.appendChild(icon);
+
+            const username = document.createElement('div');
+            username.className = 'userName';
+            const name = document.createTextNode(json.name);
+            username.appendChild(name);
+
+            const content = document.createElement('div');
+            content.className = 'postContent';
+            const contents = document.createTextNode(post.postContent);
+            content.appendChild(contents);
+
+            const feedback = document.createElement('form');
+            feedback.className = 'feedback';
+            const likelink = document.createElement('a');
+            likelink.href = "";
+            const likeimage = document.createElement('img');
+            likeimage.className = 'unlike';
+            likeimage.src = 'unlike.jpg';
+            likelink.appendChild(likeimage);
+            const reply = document.createElement('button');
+            reply.className = 'feedbackButton';
+            reply.appendChild(document.createTextNode('Reply'));
+            const report = document.createElement('button');
+            report.className = 'feedbackButton';
+            report.appendChild(document.createTextNode('Report'));
+            feedback.appendChild(likelink);
+            feedback.appendChild(reply);
+            feedback.appendChild(report);
+
+            postBody.appendChild(split);
+            thePost.appendChild(iconBox);
+            thePost.appendChild(username);
+            thePost.appendChild(content);
+            thePost.appendChild(feedback);
+            postBody.appendChild(thePost);
+
+            // fetch a url to save the new post
+            const newpost = {
+                likes: 0,
+                reported: 0,
+                replies: [],
+                poster: json._id,
+                postContent: post.postContent,
+                category: post.category
+            }
+            url = '/addPost';
+            const request = new Request(url, {
+                method: 'POST',
+                body: JSON.stringify(newpost),
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+            });
+            return fetch(request)
+                .then((res) => {
+                    // Handle response we get from the API
+                    if (res.status == 200) {
+                        log('Success')
+                    }
+                    else {
+                        log('failed')
+                    }
+                    log(res)
+                }).catch((error) => {
+                    console.log(error)
+                })
 
         }).catch((error) => {
-            console.log(error)
-        })
-    
+        console.log(error)
+    })
+
 
 }
 
@@ -480,112 +474,118 @@ function addReplyPost(target, post) {
     // fetch a url to get current logged in user
     let url = '/getCurrUser';
     fetch(url)
-    .then((res) => { 
-        if (res.status === 200) {
-           return res.json() 
-       } else {
-            alert('Could not get user')
-       }                
-    })
-    .then((json) => {
-        // adding dynamic html 
-        const split = document.createElement('div');
-        split.className = 'postSplit';
-        const thePost = document.createElement('div');
-        thePost.className = 'post';
-
-        const iconBox = document.createElement('div');
-        iconBox.className = 'posterIconBox';
-        const icon = document.createElement('img');
-        icon.className = 'posterIcon';
-        icon.src = 'signicon.jpg';
-        iconBox.appendChild(icon);
-
-        const username = document.createElement('div');
-        username.className = 'userName';
-        const name = document.createTextNode(json.name);
-        username.appendChild(name);
-
-        const content = document.createElement('div');
-        content.className = 'postContent';
-        const contents = document.createTextNode(post.postContent);
-        content.appendChild(contents);
-
-        const feedback = document.createElement('form');
-        feedback.className = 'feedback';
-        const likelink = document.createElement('a');
-        likelink.href = "";
-        const likeimage = document.createElement('img');
-        likeimage.className = 'unlike';
-        likeimage.src = 'unlike.jpg';
-        likelink.appendChild(likeimage);
-        const reply = document.createElement('button');
-        reply.className = 'feedbackButton';
-        reply.appendChild(document.createTextNode('Reply'));
-        const report = document.createElement('button');
-        report.className = 'feedbackButton';
-        report.appendChild(document.createTextNode('Report'));
-        feedback.appendChild(likelink);
-        feedback.appendChild(reply);
-        feedback.appendChild(report);
-
-        thePost.appendChild(iconBox);
-        thePost.appendChild(username);
-        thePost.appendChild(content);
-        thePost.appendChild(feedback);
-        target.appendChild(split);
-        target.appendChild(thePost);
-
-        // fetch a url to save the new post
-        const newpost = {
-            likes: 0,
-            reported: 0,
-            replies: [],
-            poster: json._id,
-            postContent: post.postContent,
-            category: post.category
-        }
-        const oldpost = {
-            postContent: target.children[2].innerText,
-            category: post.category
-        }
-        const data = {newpost, oldpost}
-        url = '/addReply';
-        const request = new Request(url, {
-        method: 'POST', 
-        body: JSON.stringify(data),
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        },
-        });
-        return fetch(request)
         .then((res) => {
-            // Handle response we get from the API
-            if (res.status == 200) {
-                log('Success')
+            if (res.status === 200) {
+                return res.json()
+            } else {
+                alert('Could not get user')
             }
-            else {
-                log('failed')
-            }
-            log(res)
-        }).catch((error) => {
-            console.log(error)
         })
+        .then((json) => {
+            // adding dynamic html
+            const split = document.createElement('div');
+            split.className = 'postSplit';
+            const thePost = document.createElement('div');
+            thePost.className = 'post';
+
+            const iconBox = document.createElement('div');
+            iconBox.className = 'posterIconBox';
+            const icon = document.createElement('img');
+            icon.className = 'posterIcon';
+            icon.src = 'signicon.jpg';
+            iconBox.appendChild(icon);
+
+            const username = document.createElement('div');
+            username.className = 'userName';
+            const name = document.createTextNode(json.name);
+            username.appendChild(name);
+
+            const content = document.createElement('div');
+            content.className = 'postContent';
+            const contents = document.createTextNode(post.postContent);
+            content.appendChild(contents);
+
+            const feedback = document.createElement('form');
+            feedback.className = 'feedback';
+            const likelink = document.createElement('a');
+            likelink.href = "";
+            const likeimage = document.createElement('img');
+            likeimage.className = 'unlike';
+            likeimage.src = 'unlike.jpg';
+            likelink.appendChild(likeimage);
+            const reply = document.createElement('button');
+            reply.className = 'feedbackButton';
+            reply.appendChild(document.createTextNode('Reply'));
+            const report = document.createElement('button');
+            report.className = 'feedbackButton';
+            report.appendChild(document.createTextNode('Report'));
+            feedback.appendChild(likelink);
+            feedback.appendChild(reply);
+            feedback.appendChild(report);
+
+            thePost.appendChild(iconBox);
+            thePost.appendChild(username);
+            thePost.appendChild(content);
+            thePost.appendChild(feedback);
+            target.appendChild(split);
+            target.appendChild(thePost);
+
+            // fetch a url to save the new post
+            const newpost = {
+                likes: 0,
+                reported: 0,
+                replies: [],
+                poster: json._id,
+                postContent: post.postContent,
+                category: post.category
+            }
+            const oldpost = {
+                postContent: target.children[2].innerText,
+                category: post.category
+            }
+            const data = {newpost, oldpost}
+            url = '/addReply';
+            const request = new Request(url, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+            });
+            return fetch(request)
+                .then((res) => {
+                    // Handle response we get from the API
+                    if (res.status == 200) {
+                        log('Success')
+                    }
+                    else {
+                        log('failed')
+                    }
+                    log(res)
+                }).catch((error) => {
+                    console.log(error)
+                })
 
         }).catch((error) => {
-            console.log(error)
-        })
+        console.log(error)
+    })
 }
 
 function navigate(e) {
     let url = '';
-    if(e.target.id === 'qTab') {
-        url='/admin_q'
-    } else if(e.target.id === 'bTab') {
-        url='/admin_b'
-    } else if(e.target.id === 'fTab') {
-        url='/admin_f'
+    if (e.target.id === 'qTab' && document.title === 'Admin Dashboard') {
+        url = '/admin_q'
+    } else if (e.target.id === 'bTab' && document.title === 'Admin Dashboard') {
+        url = '/admin_b'
+    } else if (e.target.id === 'fTab' && document.title === 'Admin Dashboard') {
+        url = '/admin_f'
+    } else if (e.target.id === 'qTab' && document.title === 'User Dashboard') {
+        url = '/logged_q'
+    } else if (e.target.id === 'bTab' && document.title === 'User Dashboard') {
+        url = '/logged_b'
+    } else if (e.target.id === 'fTab' && document.title === 'User Dashboard') {
+        url = '/logged_f'
     }
 
     console.log('url is ' + url)
