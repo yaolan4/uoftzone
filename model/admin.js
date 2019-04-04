@@ -6,14 +6,13 @@ const AdminSchema = new mongoose.Schema({
 	name: String,
 	email: String,
 	password: String,
-<<<<<<< HEAD
+
 },  { collection : 'Admin' });
-=======
-});
+
+
 // Our own student finding function
 AdminSchema.statics.findByNamePassword = function(name, password) {
     const Admin = this
->>>>>>> bd0c47a300282d1828b5affa48358eecf64b7435
 
     return Admin.findOne({'name': name}).then((admin) => {
         if (!admin) {
