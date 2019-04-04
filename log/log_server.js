@@ -171,6 +171,12 @@ app.get('/dashboard', redirectToIndex, (req, res) => {
 //
 //
 // })
+app.updateEmail('/posts/:id', (req, res) => {
+
+  var user = req.params.id;
+  User.find({email: user});
+  
+}
 
 // Middleware for authentication for resources
 const authenticateUser = (req, res, next) => {
