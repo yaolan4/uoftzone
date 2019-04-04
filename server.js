@@ -688,9 +688,29 @@ app.post('/addReply', checkLoggedIn, async (req, res) => {
 
 })
 
+//go to user profile
+app.get('/user_profile', authenticateUser, (req, res) => {
+    if(req.user) {
+        req.session.user = req.user._id;
+        log(req.user)
+        log(req.session.user)
+        res.sendFile(__dirname + '/public/user_profile.html')
+    } else {
+        res.redirect('/')
+    }
+})
 
-
-
+//go to admin profile users
+app.get('/admin_profile_users', authenticateAdmin, (req, res) => {
+    if(req.admin) {
+        req.session.admin = req.admin._id;
+        log(req.admin)
+        log(req.session.admin)
+        res.sendFile(__dirname + '/public/admin_profile_users.html')
+    } else {
+        res.redirect('/')
+    }
+})
 
 
 //user signup

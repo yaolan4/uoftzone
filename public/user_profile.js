@@ -8,15 +8,14 @@ var user
 //Get DOM from html 
 const tableEntries = document.querySelector('#postTable')
 const removeEntries = document.querySelector('#posts')
+const logOut = document.querySelector('#logout')
+const logOutButton = document.querySelector('#logOutButton')
 
 //Entries wait for events
 tableEntries.addEventListener('click', changeRemoveStatus)
 removeEntries.addEventListener('click', remove)
-
-
-
-
-
+logOut.addEventListener('click', userLogOut)
+logOutButton.addEventListener('click', userLogOut)
 
 /**Local use functions */
 /**The following functions does not need external severs data
@@ -44,6 +43,38 @@ function remove(e) {
  and can not be functional just using local data
 */
 
+function userLogOut() {
+    const url = '/users/logout';
+
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: 'get',
+        credentials: 'include', //include in actual log out method so that cookies can be erased
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+    console.log('making a request to log out')
+    fetch(request)
+        .then((res) => {
+            // Handle response we get from the API
+            // Usually check the error codes to see what happened
+            if (res.status === 200) {
+                console.log(res)
+                window.location.href = res.url;
+            } else {
+                console.log('status not 200')
+                alert('log out not successful')
+
+            }
+            console.log(res)
+        }).catch((error) => {
+        alert('log out not successful')
+        // loginNotSuccessful()
+        console.log(error)
+    })
+}
 
 function addPost(){
     // Get a new post information from server

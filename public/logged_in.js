@@ -2,8 +2,12 @@
 const log = console.log;
 const path = window.location.pathname;
 const postBody = document.querySelector('#postBodyBox');
+const loginBox = document.querySelector('#loginBox');
+
 //* Event listeners for button submit and button click */
 postBody.addEventListener('click', allClickEvents);
+loginBox.addEventListener('click', allClickEvents);
+
 // log(page);
 
 // Functions that don't edit DOM themselves, but can call DOM functions 
@@ -75,10 +79,42 @@ function allClickEvents(e) {
         e.target.className = 'unlike';
         e.target.src = 'unlike.jpg';
         recordUnliking(e);
+    } else if (e.target.id ==='userIcon' || e.target.id ==='userSpan') {
+        goToUserProfile();
     }
 
 }
 
+function goToUserProfile() {
+    const url = '/user_profile';
+
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: 'get',
+        // credentials: 'include', //include in actual log out method
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+    fetch(request)
+        .then((res) => {
+            // Handle response we get from the API
+            // Usually check the error codes to see what happened
+            if (res.status === 200) {
+                console.log(res)
+                window.location.href = res.url;
+            } else {
+                console.log('status not 200')
+                alert('redirect not successful')
+            }
+            console.log(res)
+        }).catch((error) => {
+        alert('redirect not successful')
+        // loginNotSuccessful()
+        console.log(error)
+    })
+}
 
 function recordLiking(e) {
     // get the necessary of the liked post data

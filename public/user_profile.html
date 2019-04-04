@@ -1,119 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
- 
- <head>
-   <meta charset="utf-8">
-   <title>CSC309 team54 project admin profile:users</title>
-   <link rel="stylesheet" type="text/css" href="user_profile.css">
- </head>
 
- <div id="wrapper">
-     
- <body>
+<head>
+    <meta charset="utf-8">
+    <title>CSC309 team54 project admin profile:users</title>
+    <link rel="stylesheet" type="text/css" href="user_profile.css">
+</head>
 
-    <div id = "header">
-         <button class = "mainpageButton" type="button" onclick= "window.location ='/logged_q'"><h1>UofT Zone</h1></button>
-         <div id = "logout">
-            <button class = "logoutButton" type="button" onclick= "window.location ='/users/logout'">
-               <div class="buttonIconContainer">
-                     <img class = "personIcon" src = "person.png" />
-               </div>
-               <div class = "logoutContent">
-                     <h4 > LOG OUT</h4>
-               </div>
+
+<body>
+<div id="wrapper">
+
+    <div id="header">
+        <button class="mainpageButton" type="button" onclick="window.location ='/logged_q'"><h1>UofT Zone</h1></button>
+        <div id="logout">
+            <button class="logoutButton" type="button" id="logOutButton">
+                <div class="buttonIconContainer">
+                    <img class="personIcon" src="./person.png"/>
+                </div>
+                <div class="logoutContent">
+                    <h4> LOG OUT</h4>
+                </div>
             </button>
 
-         </div>
-         <hr color = grey>
-   </div>
-   
-   <div id = "leftside">
-      <div id = "profilePic">
-         <img class = "profilePicture" src = "empty.png" />
+        </div>
+        <hr color=grey>
+    </div>
 
-      </div>
+    <div id="leftside">
+        <div id="profilePic">
+            <img class="profilePicture" src="empty.png"/>
 
-     <div id = "profileInf">
-         <p>Username:<span>Admin</span></p>
-         <p>Email:<span></span></p>
-         <button class = "edit" type="button" onclick= "window.location ='/user/change_email'">Edit Email</button>
+        </div>
 
-      </div>
+        <div id="profileInf">
+            <p>Username:<span>Admin</span></p>
+            <p>Email:<span></span></p>
+            <button class="edit" type="button" onclick="window.location ='/user/change_email'">Edit Email</button>
 
-      <div id = "changePassword">
-         <button class = "change" type="button" onclick= "window.location ='/user/change_password'">Change My Password</button>
-      </div>
+        </div>
 
-  </div>
+        <div id="changePassword">
+            <button class="change" type="button" onclick="window.location ='/user/change_password'">Change My Password
+            </button>
+        </div>
 
-  <div id = "posts">
+    </div>
 
-      <div class = myposts>
-            <button class = "MyPostsButton" type="button" disabled ><strong >My Posts</strong></button>
-      </div>
-                          
+    <div id="posts">
+
+        <div class=myposts>
+            <button class="MyPostsButton" type="button" disabled><strong>My Posts</strong></button>
+        </div>
 
 
-      <table id='postTable'>
+        <table id='postTable'>
             <tbody>
-                  <tr>
-                        <th>
-                              Post content
-                        </th>
-                        <th>
-                              number of likes
-                        </th>
-                        <th>
-                              number of replies
-                        </th>
-                        <th>
-                            Remove
-                        </th>
-                  </tr>
-                  <tr>
-                        <td>
-                              U of T is a great place!
-                        </td>
-                        <td>
-                                    3
-                        </td>
-                        <td>
-                                    1
-                        </td>
-                        <td>
-                              <button class = "check" name = "white" type="button"></button>
-                        </td>
-                  </tr>
-                  <tr>
-                        <td>
-                              Free food at BA, come and pick up guys it is free!!!
-                        </td>
-                        <td>
-                              0
-                        </td>
-                        <td>
-                               0
-                         </td>
-                        <td>
-                              <button class = "check" name = "white"  type="button"></button>
-                        </td>
-                  </tr>
+            <tr>
+                <th>
+                    Post content
+                </th>
+                <th>
+                    number of likes
+                </th>
+                <th>
+                    number of replies
+                </th>
+                <th>
+                    Remove
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    U of T is a great place!
+                </td>
+                <td>
+                    3
+                </td>
+                <td>
+                    1
+                </td>
+                <td>
+                    <button class="check" name="white" type="button"></button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Free food at BA, come and pick up guys it is free!!!
+                </td>
+                <td>
+                    0
+                </td>
+                <td>
+                    0
+                </td>
+                <td>
+                    <button class="check" name="white" type="button"></button>
+                </td>
+            </tr>
             <tbody>
-      </table>
+        </table>
 
-      <button class = "remove" type="button">REMOVE</button>
-
-
-
-  <br><br>
+        <button class="remove" type="button">REMOVE</button>
 
 
-  <script type="text/javascript" src="user_profile.js"></script>
+        <br><br>
 
-
+    </div>
 </div>
+<script type="text/javascript" src="user_profile.js"></script>
 
- </body>
-</div>
+</body>
 
- </html>
+</html>
