@@ -7,6 +7,7 @@ const bodyParser = require('body-parser') // middleware for parsing HTTP body fr
 const session = require('express-session')
 const hbs = require('hbs')
 const app = express();
+const path = require('path')
 app.use(bodyParser.json());
 
 const { ObjectID } = require('mongodb')
@@ -134,14 +135,38 @@ app.get('/users/logout', authenticateUser, (req, res) => {
     })
 })
 
-//use what's in admin_server to check authentication of admin_Server
+//use what's in admin_server to check authenticaZtion of admin_Server
 //Get all users
 
 
 
 
 
-//Navigation for main
+//Navigation for guest
+
+app.get('/guest_b',sessionChecker, (req, res) => {
+    res.sendFile(__dirname + '/public/not_logged_b.html')
+})
+
+
+
+app.get('/guest_f', sessionChecker, (req, res) => {
+    res.sendFile(__dirname + '/public/not_logged_f.html')
+})
+
+//Navigatio for user
+app.get('/user_profile',authenticateUser, (req, res) => {
+    if(req.user) {
+        req.session.user = req.user._id;
+        log(req.admin)
+        log(req.session.admin)
+         res.sendFile(__dirname + '/public/user_profile.html') //put the admin html
+    } else {
+        res.redirect('/')
+    }
+})
+
+
 app.get('/logged_q',checkLoggedIn, (req, res) => {
     res.sendFile(__dirname + '/public/logged_q.html')
 })
