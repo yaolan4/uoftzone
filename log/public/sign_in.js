@@ -2,13 +2,15 @@ const signIn = document.querySelector('#signinContent');
 const username = document.querySelector('#username');
 const password = document.querySelector('#password');
 const signinForm = document.querySelector('#signinForm');
+const home = document.querySelector('#loginBox');
 
 //* Event listeners for button submit and button click */
 signIn.addEventListener('click', allClickEvents);
+home.addEventListener('click', allClickEvents);
 
 // Functions that don't edit DOM themselves, but can call DOM functions
 function userLogin() {
-    const url = '/login/user';
+    const url = '/login';
     console.log('user login: username and pswd are ' + username + password)
     // The data we are going to send in our request
     let data = {
@@ -55,6 +57,7 @@ function userNotLogin() {
     // Create our request constructor with all the parameters we need
     const request = new Request(url, {
         method: 'get',
+        // credentials: 'include', //include in actual log out method
         headers: {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
@@ -79,6 +82,7 @@ function userNotLogin() {
         console.log(error)
     })
 }
+
 function allClickEvents(e) {
     //e.preventDefault();
     if (e.target.id === 'submitButton' || e.target.id === 'submitLink') {
@@ -107,6 +111,8 @@ function allClickEvents(e) {
         //     }
         //
         // }
+    } else if (e.target.id === 'loginBox' || e.target.id === 'title') {
+        userNotLogin(); //back to home page
     }
 }
 

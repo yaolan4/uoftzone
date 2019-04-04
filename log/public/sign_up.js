@@ -2,9 +2,12 @@ const signUp = document.querySelector('#signupContent');
 const username = document.querySelector('#username');
 const password = document.querySelector('#password');
 const email = document.querySelector('#email');
+const home = document.querySelector('#loginBox');
 
 //* Event listeners for button submit and button click */
 signUp.addEventListener('click', allClickEvents);
+home.addEventListener('click', allClickEvents);
+
 
 function userSignUp() {
     const url = '/users';
@@ -45,12 +48,39 @@ function userSignUp() {
             console.log(res)
 
         }).catch((error) => {
-            alert('sign up not successful')
+        alert('sign up not successful')
         console.log(error)
     })
 }
 
+function backToHome() {
+    const url = '/users/logout';
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: 'get',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+    fetch(request)
+        .then((res) => {
+            // Handle response we get from the API
+            // Usually check the error codes to see what happened
+            if (res.status === 200) {
+                console.log('user cancel')
+                window.location.href = res.url
+            } else {
+                alert('cancel not successful')
+            }
+            console.log(res)
 
+        }).catch((error) => {
+        alert('cancel not successful')
+        console.log(error)
+    })
+
+}
 
 // Functions that don't edit DOM themselves, but can call DOM functions
 function allClickEvents(e) {
@@ -76,12 +106,10 @@ function allClickEvents(e) {
         //     }
         //
         // }
+    } else if (e.target.id === 'cancelButton' || e.target.id === 'cancelLink' || e.target.id === 'loginBox' || e.target.id === 'title') {
+        backToHome(); //back to home page
     }
 }
-
-
-
-
 
 
 // DOM functions
