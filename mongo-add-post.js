@@ -4,14 +4,14 @@ const { MongoClient, ObjectID } = require('mongodb')
 // Connect to the local mongo database
 const allposts = [];
 
-MongoClient.connect('mongodb://localhost:27017/StudentAPI', { useNewUrlParser: true }, async (error, client) => {
+MongoClient.connect('mongodb://localhost:27017/UTZoneAPI', { useNewUrlParser: true }, async (error, client) => {
 	if (error) {
 		log("Can't connect to mongo serber")
 	} else {
 		log('Connected to mongo server')
 	}
 
-	const db = client.db('UofTZoneAPI')
+	const db = client.db('UTZoneAPI')
 	let default_user = {};
 	// find the created default user's id, and save it in a json file.
 	await db.collection('User').find().toArray().then((user) => {
