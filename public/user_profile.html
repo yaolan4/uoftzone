@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+ <head>
+   <meta charset="utf-8">
+   <title>CSC309 team54 project admin profile:users</title>
+   <link rel="stylesheet" type="text/css" href="user_profile.css">
+ </head>
+
+ <div id="wrapper">
+     
+ <body>
+
+    <div id = "header">
+         <button class = "mainpageButton" type="button" onclick= "window.location ='/logged_q'"><h1>UofT Zone</h1></button>
+         <div id = "logout">
+            <button class = "logoutButton" type="button" onclick= "window.location ='/users/logout'">
+               <div class="buttonIconContainer">
+                     <img class = "personIcon" src = "person.png" />
+               </div>
+               <div class = "logoutContent">
+                     <h4 > LOG OUT</h4>
+               </div>
+            </button>
+
+         </div>
+         <hr color = grey>
+   </div>
+   
+   <div id = "leftside">
+      <div id = "profilePic">
+         <img class = "profilePicture" src = "empty.png" />
+
+      </div>
+
+     <div id = "profileInf">
+         <p>Username:<span>Admin</span></p>
+         <p>Email:<span></span></p>
+         <button class = "edit" type="button" onclick= "window.location ='/user/change_email'">Edit Email</button>
+
+      </div>
+
+      <div id = "changePassword">
+         <button class = "change" type="button" onclick= "window.location ='/user/change_password'">Change My Password</button>
+      </div>
+
+  </div>
+
+  <div id = "posts">
+
+      <div class = myposts>
+            <button class = "MyPostsButton" type="button" disabled ><strong >My Posts</strong></button>
+      </div>
+                          
+
+
+      <table id='postTable'>
+            <tbody>
+                  <tr>
+                        <th>
+                              Post content
+                        </th>
+                        <th>
+                              number of likes
+                        </th>
+                        <th>
+                              number of replies
+                        </th>
+                        <th>
+                            Remove
+                        </th>
+                  </tr>
+                  <tr>
+                        <td>
+                              U of T is a great place!
+                        </td>
+                        <td>
+                                    3
+                        </td>
+                        <td>
+                                    1
+                        </td>
+                        <td>
+                              <button class = "check" name = "white" type="button"></button>
+                        </td>
+                  </tr>
+                  <tr>
+                        <td>
+                              Free food at BA, come and pick up guys it is free!!!
+                        </td>
+                        <td>
+                              0
+                        </td>
+                        <td>
+                               0
+                         </td>
+                        <td>
+                              <button class = "check" name = "white"  type="button"></button>
+                        </td>
+                  </tr>
+            <tbody>
+      </table>
+
+      <button class = "remove" type="button">REMOVE</button>
+
+
+
+  <br><br>
+
+
+  <script type="text/javascript" src="user_profile.js"></script>
+
+
+</div>
+
+ </body>
+</div>
+
+ </html>
