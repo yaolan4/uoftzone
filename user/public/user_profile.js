@@ -1,43 +1,9 @@
 /* admin js for team 54 project */
 
-let numberOfPosts = 0;
-// global arrays
 
-const posts = [] // Array of posts
 const removePosts = [] //Array of posts to remove
-const posttitles = [] // Array of post titles
-
-
-
-class User {
-	constructor(name,password,email) {
-		this.name = name
-		this.password = password
-		this.email = email
-
-		// set user's posts and times of reported to 0
-        this.numOfPosts = 0;
-        this.numOfReported = 0;
-	}
-
-
-}
-
-
-//The post class
-class Post {
-	constructor(username,title) {
-		this.username = username
-		this.title = title
-
-		// set times of being reported to 0
-        this.numOfReported = 0;
-        this.numOfLikes = 0;
-        this.numOfReplies = 0;
-        numberOfPosts++;
-        
-	}
-}
+var posts //var to keep posts
+var user
 
 //Get DOM from html 
 const tableEntries = document.querySelector('#postTable')
@@ -48,27 +14,8 @@ tableEntries.addEventListener('click', changeRemoveStatus)
 removeEntries.addEventListener('click', remove)
 
 
-/** Add data to global array
- * call server call to get the user's information then create  a user for this user.
- */
-user = new User('user', 'user', '')
-/** 
- post3 is added by calling addPost
- */
 
 
-post1 = new Post('user','U of T is a great place!')
-post1.numOfReported  = 1
-posts.push(post1)
-posts.push(new Post('user','Free food at BA, come and pick up guys it is free!'))
-posttitles.push('U of T is a great place!')
-posttitles.push('Free food at BA, come and pick up guys it is free!')
-
-addPost() 
-
-/**call other external data functions to test their functionality */
-getLiked()
-getReplied()
 
 
 /**Local use functions */
@@ -86,6 +33,7 @@ function remove(e) {
     e.preventDefault();
     if (e.target.classList.contains('remove') ) {
         removeall()
+        deleteInDB()
 
     }
 
@@ -112,36 +60,93 @@ function addPost(){
 
 }
 
-function getLiked(){
-    // Get the post being reported from server
-    // code below requires server call
-    //We use mock user for phase 1 instead
-    //Assume post2 is get reported by some user
-    post = posts[1]
-    post.numOfLikes++
 
 
-    //call DOM function 
-    addPostLikesNum(post) 
-  
+/**External data functions */
+/**The following functions  need obtain external severs data first
+*/
+function deleteInDB(){
+    
+    for (i = 1; i < tableEntries.children[0].childElementCount ; i++) {
+            id = tableEntries.children[0].children[i].children[0].innerText
+            //users = getUsersOrPosts()
+            //console.log(users)
+            same = posts.filter(post => post._id == id)
+            //console.log(same)
+            if (removePosts.includes(id) && same.length > 0){
+                post = same[0]
+                log(post)
+                deletePosts(post._id)
 
+            }
+        }
+    
+
+}
+
+
+function getPosts(id) {
+    var url = '/users' + id;
+
+
+
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            alert('Could not get user')
+       }                
+    })
+    .then((json) => {
+        if (document.title == "CSC309 team54 project admin profile:users"){
+            user = json
+            json.posts.map(() => addNewPost(u) )
+            posts =  json.posts
+            console.log(post)
+        
+        }
+
+
+        
+    }).catch((error) => {
+        console.log(error)
+    })
 }
 
 
-function getReplied(){
-    // Get the post being reported from server
-    // code below requires server call
-    //We use mock user for phase 1 instead
-    //Assume post3 is get reported by some user
-    post = posts[2]
-    post.numOfReplies++
+function deleterPosts(id) {
+    var url = '/posts/' + id;
+    
 
 
-    //call DOM function 
-    addPostReplyNum(post) 
-  
+    fetch(url, {
+        method: 'delete'
+    })
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            alert('Could not get id')
+       }                
+    })
+    .then((json) => {
+        
+            console.log(json)
+         
 
+        
+    }).catch((error) => {
+        console.log(error)
+    })
 }
+
+
+
+
+
+
+
 
 
 
@@ -199,19 +204,13 @@ function removeall(){
 
 
 
-function addPostNum(user){
-    name = user.name
-    numPost = user.numOfPosts
-    index = users.indexOf(user)
-    userRow = tableEntries.children[0].children[index+1]
-    userRow.children[1].innerText = numPost
 
-}
+
 
 function addNewPost(post){
-    const likes = post.numOfLikes;
-    const title = post.title;
-    const replyNum = post.numOfReplies;
+    const likes = post.likes;
+    const title = post.postContent;
+    const replyNum = post.replies.length;
 
     const tableRow = document.createElement('tr')
 
@@ -245,21 +244,7 @@ function addNewPost(post){
 
 }
 
-function addPostLikesNum(post) {
 
-    index = posts.indexOf(post)
-    postRow = tableEntries.children[0].children[index+1]
-    postRow.children[1].innerText = post.numOfLikes
-
-}
-
-function addPostReplyNum(post) {
-    numReport = post.numOfReported
-    index = posts.indexOf(post)
-    postRow = tableEntries.children[0].children[index+1]
-    postRow.children[2].innerText = post.numOfReplies
-
-}
 
 
 
