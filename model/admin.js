@@ -16,7 +16,7 @@ AdminSchema.statics.findByNamePassword = function(name, password) {
 
     return Admin.findOne({'name': name}).then((admin) => {
         if (!admin) {
-            console.log('user does not exist :(')
+            console.log('admin does not exist :(')
             return Promise.reject()
         }
 

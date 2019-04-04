@@ -12,12 +12,12 @@ app.use(bodyParser.json());
 const { ObjectID } = require('mongodb')
 
 // Import our mongoose connection
-const { mongoose } = require('../db/mongoose');
+const { mongoose } = require('./db/mongoose');
 
 // Import the models
-const { Post } = require('../model/post')
-const { User } = require('../model/user')
-const { Admin } = require('../model/admin')
+const { Post } = require('./model/post')
+const { User } = require('./model/user')
+const { Admin } = require('./model/admin')
 
 app.use(express.static("public"));
 
@@ -75,7 +75,7 @@ const authenticateAdmin = (req, res, next) => {
     }
 }
 
-
+//to check if user or admin exists, directly jumped to dashboard if so
 const sessionChecker = (req, res, next) => {
     if (req.session.user || req.session.admin) {
         res.redirect('dashboard')
@@ -84,8 +84,8 @@ const sessionChecker = (req, res, next) => {
     }
 }
 
-// Add middleware to check for not logged-in users
-const redirectToIndex = (req, res, next) => {
+// Add middleware to check if user/admin logs in and redirect to index if not
+const checkLoggedIn = (req, res, next) => {
     if (!req.session.user && !req.session.admin) {
         res.redirect('/')
     } else {
@@ -94,13 +94,13 @@ const redirectToIndex = (req, res, next) => {
 }
 
 
-app.get('/dashboard', redirectToIndex, (req, res) => {
+app.get('/dashboard', checkLoggedIn, (req, res) => {
     log('send logged_q')
-    res.sendFile(path.join(__dirname, '..', '/main_sections/public/logged_q.html'))
+    res.sendFile(__dirname + '/public/logged_q.html')
 })
 
 app.get('/index', sessionChecker, (req, res) => {
-    res.sendFile(path.join(__dirname + '/..' + '/main_sections/public/index.html'))
+    res.sendFile(path.join(__dirname + '/public/index.html'))
 })
 
 app.get('/', sessionChecker, (req, res) => {
@@ -124,6 +124,50 @@ app.get('/users/logout', authenticateUser, (req, res) => {
     })
 })
 
+//use what's in admin_server to check authentication of admin_Server
+//Get all users
+
+
+
+
+
+//Navigation for main
+app.get('/logged_q',checkLoggedIn, (req, res) => {
+    res.sendFile(__dirname + '/public/logged_q.html')
+})
+
+app.get('/logged_b', checkLoggedIn, (req, res) => {
+    res.sendFile(__dirname + '/public/logged_b.html')
+})
+
+app.get('/logged_f', checkLoggedIn, (req, res) => {
+    res.sendFile(__dirname + '/public/logged_f.html')
+})
+
+app.get('/admin', (req, res) => {
+
+})
+
+
+//Navigation for admin
+app.get('/admin_profile',authenticateAdmin, (req, res) => {
+	res.sendFile(__dirname + '/public/admin_profile_users.html')
+})
+
+app.get('/admin_profile2',authenticateAdmin, (req, res) => {
+	res.sendFile(__dirname + '/public/admin_profile_posts.html')
+})
+
+
+
+app.get('/admin/change_email', authenticateAdmin,(req, res) => {
+
+})
+
+app.get('/admin/change_password',authenticateAdmin, (req, res) => {
+
+})
+
 app.get('/admins/logout', authenticateAdmin, (req, res) => {
     req.session.destroy((error) => {
         if (error) {
@@ -134,54 +178,9 @@ app.get('/admins/logout', authenticateAdmin, (req, res) => {
         }
     })
 })
-
-//use what's in admin_server to check authentication of admin_Server
-//Get all users
-
-
-
-
-
-//Navigation for main
-app.get('/logged_q', (req, res) => {
-    res.sendFile(__dirname + '/public/logged_q.html')
-})
-
-app.get('/logged_b', (req, res) => {
-    res.sendFile(__dirname + '/public/logged_b.html')
-})
-
-app.get('/logged_f', (req, res) => {
-    res.sendFile(__dirname + '/public/logged_f.html')
-})
-
-app.get('/admin', (req, res) => {
-
-})
-
-
-//Navigation for admin
-app.get('/admin_profile', (req, res) => {
-	res.sendFile(__dirname + '/public/admin_profile_users.html')
-})
-
-app.get('/admin_profile2', (req, res) => {
-	res.sendFile(__dirname + '/public/admin_profile_posts.html')
-})
-
-
-
-app.get('/admin/change_email', (req, res) => {
-
-})
-
-app.get('/admin/change_password', (req, res) => {
-
-})
-
-app.get('/admin/logout', (req, res) => {
-
-})
+// app.get('/admin/logout', authenticateAdmin, (req, res) => {
+//
+// })
 
 
 
@@ -197,10 +196,6 @@ app.get('/login', sessionChecker, (req, res) => {
 })
 
 //user admin log in
-
-
-
-
 app.post('/login', sessionChecker, (req, res) => {
     const name = req.body.name
     const password = req.body.password
@@ -233,8 +228,9 @@ app.post('/login', sessionChecker, (req, res) => {
                 // Add the user to the session cookie that we will
                 // send to the client
                 req.session.admin = admin._id;
+
                 // req.session.name = admin.name
-                log('found admin :)')
+                log('found admin :) admin id: ' + req.session.admin)
                 res.redirect('/dashboard')
             }
         }).catch((error) => {
@@ -244,7 +240,7 @@ app.post('/login', sessionChecker, (req, res) => {
     }
 })
 
-
+//user sign up
 app.post('/users', (req, res) => {
 	// Add code here
 	const user =  new User ({
@@ -277,7 +273,7 @@ app.get('/users', authenticateAdmin, (req, res) => {
 
 
 //Delete a user
-app.delete('/users/:id', (req, res) => {
+app.delete('/users/:id', authenticateAdmin, (req, res) => {
 	const id = req.params.id
 
 	// Good practise is to validate the id
@@ -570,10 +566,11 @@ app.patch('/unreport', async (req, res) => {
 
 })
 
-app.get('/getCurrUser', (req, res) => {
-    User.find({_id: new ObjectID(curr_user)}).then(user => {
+app.get('/getCurrUser', checkLoggedIn, (req, res) => {
+
+    User.find({_id: req.session.user}).then(user => {
         if (user) {
-            res.send(user[0])
+            res.send(user)
         }
         else {
             res.status(404).send()
@@ -583,7 +580,7 @@ app.get('/getCurrUser', (req, res) => {
     })
 })
 
-app.post('/addPost', async (req, res) => {
+app.post('/addPost', checkLoggedIn, async (req, res) => {
     const post =  new Post ({
        likes: req.body.likes,
        reported: req.body.reported,
@@ -620,7 +617,7 @@ app.post('/addPost', async (req, res) => {
     });
 })
 
-app.post('/addReply', async (req, res) => {
+app.post('/addReply', checkLoggedIn, async (req, res) => {
     //1.save post to database
     const post =  new Post ({
        likes: req.body.newpost.likes,

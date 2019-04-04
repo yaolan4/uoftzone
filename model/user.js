@@ -35,13 +35,6 @@ UserSchema.statics.findByNamePassword = function(name, password) {
             console.log('user pswd is ' + user.password)
             console.log('pswd is ' + password)
 
-            // if(user.password === password ){
-            //             console.log('return the user')
-            //             resolve(user);
-            // } else {
-            //             reject();
-            //             console.log('pswd  dont match')
-            // }
             bcrypt.compare(password, user.password, (error, result) => {
                 if (result) {
                     console.log('return the user')
