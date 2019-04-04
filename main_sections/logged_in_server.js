@@ -1,276 +1,342 @@
-'use strict'
+'use strict';
 const log = console.log;
-const path = window.location.pathname;
-const postBody = document.querySelector('#postBodyBox');
-//* Event listeners for button submit and button click */
-postBody.addEventListener('click', allClickEvents);
-// log(page);
-// Functions that don't edit DOM themselves, but can call DOM functions 
-function allClickEvents(e) {
-    e.preventDefault();
 
-    if (e.target.value == 'Submit') {
-        if (e.target.parentElement.children[0].value != '') {
-            const post = new Post(currentUser.userID, e.target.parentElement.children[0].value, page);
-            posts.push(post);
-            console.log(post);
-            addPostToPostBox(post);
-        }
-    }
-    else if (e.target.classList.contains('feedbackButton')) {
-        if (e.target.innerText == 'Report') {
-            e.target.innerText = 'Unreport'
-            for (let i = 0; i < posts.length; i++) {
-                if ((users[posts[i].posterID].userName ==
-                    e.target.parentElement.parentElement.children[1].innerText) &&
-                    (posts[i].postContent ==
-                        e.target.parentElement.parentElement.children[2].innerText) &&
-                    posts[i].category == page) {
-                    posts[i].reported++;
-                }
-            }
-        }
-        else if (e.target.innerText == 'Unreport') {
-            e.target.innerText = 'Report'
-            for (let i = 0; i < posts.length; i++) {
-                if ((users[posts[i].posterID].userName ==
-                    e.target.parentElement.parentElement.children[1].innerText) &&
-                    (posts[i].postContent ==
-                        e.target.parentElement.parentElement.children[2].innerText) &&
-                    posts[i].category == page) {
-                    posts[i].reported--;
-                }
-            }
-        }
-        else if (e.target.innerText == 'Reply') {
-            //DOM function to add feedback
-            addFeedbackBox(e.target.parentElement.parentElement);
-        }
-    }
-    else if (e.target.classList.contains('cancel')) {
-        e.target.parentElement.parentElement.removeChild(e.target.parentElement);
-    }
-    else if (e.target.classList.contains('submitReply')) {
-        const post = new Post(currentUser.userID, e.target.parentElement.children[0].value, page)
-        posts.push(post)
-        console.log(post);
-        addReplyPost(e.target.parentElement.parentElement, post);
-        e.target.parentElement.parentElement.removeChild(e.target.parentElement);
-    }
-    else if (e.target.classList.contains('unlike')) {
-        e.target.className = 'like';
-        e.target.src = 'like.jpg';
-        // for (let i = 0; i < posts.length; i++) {
-        //     if ((users[posts[i].posterID].userName ==
-        //         e.target.parentElement.parentElement.parentElement.children[1].innerText) &&
-        //         (posts[i].postContent ==
-        //             e.target.parentElement.parentElement.parentElement.children[2].innerText) &&
-        //         posts[i].category == page) {
-        //         posts[i].likes++;
-        //         console.log(posts[i]);
-        //     }
-        // }
-        recordLiking(e);
+const express = require('express')
+const port = process.env.PORT || 3000
+const bodyParser = require('body-parser') // middleware for parsing HTTP body from client
+const session = require('express-session')
+const hbs = require('hbs')
+const app = express();
+const {ObjectID} = require('mongodb')
+app.use(bodyParser.json());
 
-    }
-    else if (e.target.classList.contains('like')) {
-        e.target.className = 'unlike';
-        e.target.src = 'unlike.jpg';
-        for (let i = 0; i < posts.length; i++) {
-            if ((users[posts[i].posterID].userName ==
-                e.target.parentElement.parentElement.parentElement.children[1].innerText) &&
-                (posts[i].postContent ==
-                    e.target.parentElement.parentElement.parentElement.children[2].innerText) &&
-                posts[i].category == page) {
-                posts[i].likes--;
-                console.log(posts[i])
-            }
-        }
-    }
+// Import our mongoose connection
+const { mongoose } = require('../db/mongoose');
 
-}
+// Import the models
+const { Post } = require('../model/post')
+const { User } = require('../model/user')
+const { Admin } = require('../model/admin')
 
+app.use(express.static("public"));
 
-function recordLiking(e) {
-    // get the necessary of the liked post data
-    let category = ''
-    if (path.includes('logged_q.html')) {
-        category = 'Q&A'
-    }
-    else if (path.includes('logged_b.html')) {
-        category = 'BookExchange'
-    }
-    else if (path.includes('logged_f.html')) {
-        category = 'FreeFood'
-    }
-    // log(category)
-    const target = e.target.parentElement.parentElement.parentElement
-    const postContent = target.children[2].innerText;
-    const poster = target.children[1].innerText;
-    // log(postContent, poster);
+app.get('/logged_q', (req, res) => {
+    res.sendFile(__dirname + '/public/logged_q.html')
+})
 
-    // const url = 'http://192.168.0.18';
-    // // The data we are going to send in our request
-    // let data = {
-    //     postContent: postContent,
-    //     poster: poster,
-    //     category: category
+app.get('/logged_b', (req, res) => {
+    res.sendFile(__dirname + '/public/logged_b.html')
+})
+
+app.get('/logged_f', (req, res) => {
+    res.sendFile(__dirname + '/public/logged_f.html')
+})
+
+let curr_user = '5ca59fca1d53716ac90243eb';
+app.get('/getuser', (req, res) => {
+    if (!req.body._id) {
+        res.status(404).send()
+    }
+    else {
+        curr_user = req.body._id;
+        res.status(200).send()
+    }
+})
+app.post 
+
+app.patch('/liked', async (req, res) => {
+
+    // if (!ObjectID.isValid(id)) {
+    //     res.status(404).send()
     // }
-    // // Create our request constructor with all the parameters we need
-    // const request = new Request(url, {
-    //     method: 'post', 
-    //     body: JSON.stringify(data),
-    //     headers: {
-    //         'Accept': 'application/json, text/plain, */*',
-    //         'Content-Type': 'application/json'
-    //     },
-    // });
-    // fetch(request)
-    // .then((res) => {
-    //     // Handle response we get from the API
-    //     if (res.status == 200) {
-    //         log('Success')
-    //     }
-    //     else {
-    //         log('failed')
-    //     }
-    //     log(res)
-    // }).catch((error) => {
-    //     console.log(error)
-    // })
-
-    fetch('/liked', {method: 'POST'})
-    .then(function(response) {
-      if(response.ok) {
-        console.log('click was recorded');
-        return;
-      }
-      throw new Error('Request failed.');
+    // find the id of the post
+    let allposts = [];
+    await Post.find().then((post) => {
+        allposts = post
+    }, (error) => {
+        res.status(500).send(error)
     })
-    .catch(function(error) {
-      console.log(error);
+    const beingmodified = allposts.filter((post) => (post.postContent == req.body.postContent) &&
+        (post.category == req.body.category))
+    
+    // update the post's like attribute
+    Post.findOneAndUpdate({
+        _id: new ObjectID(beingmodified[0]._id)
+    }, {
+        // update operators: $set and $inc 
+        $inc: {
+            likes: 1
+        }
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        log(result)
     });
-}
-// DOM functions
 
-// This function adds the post to the postBox on the page that the user wants to post.
-// function addPostToPostBox(post) {
-//     const split = document.createElement('div');
-//     split.className = 'postSplit';
-//     const thePost = document.createElement('div');
-//     thePost.className = 'post';
+    // update the information in poster's post list
+    User.findOneAndUpdate({
+        _id: new ObjectID(beingmodified[0].poster), "posts._id": new ObjectID(beingmodified[0]._id)
+    }, {
+        // update operators: $set and $inc 
+        $inc: { "posts.$.likes" : 1 }
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        log(result)
+    });
 
-//     const iconBox = document.createElement('div');
-//     iconBox.className = 'posterIconBox';
-//     const icon = document.createElement('img');
-//     icon.className = 'posterIcon';
-//     icon.src = users[post.posterID].photo;
-//     iconBox.appendChild(icon);
+})
 
-//     const username = document.createElement('div');
-//     username.className = 'userName';
-//     const name = document.createTextNode(users[post.posterID].userName);
-//     username.appendChild(name);
+app.patch('/unliked', async (req, res) => {
 
-//     const content = document.createElement('div');
-//     content.className = 'postContent';
-//     const contents = document.createTextNode(post.postContent);
-//     content.appendChild(contents);
+    // if (!ObjectID.isValid(id)) {
+    //     res.status(404).send()
+    // }
+    // find the id of the post
+    let allposts = [];
+    await Post.find().then((post) => {
+        allposts = post
+    }, (error) => {
+        res.status(500).send(error)
+    })
+    const beingmodified = allposts.filter((post) => (post.postContent == req.body.postContent) &&
+        (post.category == req.body.category))
+    
+    // update the post's like attribute
+    Post.findOneAndUpdate({
+        _id: new ObjectID(beingmodified[0]._id)
+    }, {
+        // update operators: $set and $inc 
+        $inc: {
+            likes: -1
+        }
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        log(result)
+    });
 
-//     const feedback = document.createElement('form');
-//     feedback.className = 'feedback';
-//      const likelink = document.createElement('a');
-//     likelink.href = "";
-//     const likeimage = document.createElement('img');
-//     likeimage.className = 'unlike';
-//     likeimage.src = 'unlike.jpg';
-//     likelink.appendChild(likeimage);
-//     const reply = document.createElement('button');
-//     reply.className = 'feedbackButton';
-//     reply.appendChild(document.createTextNode('Reply'));
-//     const report = document.createElement('button');
-//     report.className = 'feedbackButton';
-//     report.appendChild(document.createTextNode('Report'));
-//     feedback.appendChild(likelink);
-//     feedback.appendChild(reply);
-//     feedback.appendChild(report);
+    // update the information in poster's post list
+    User.findOneAndUpdate({
+        _id: new ObjectID(beingmodified[0].poster), "posts._id": new ObjectID(beingmodified[0]._id)
+    }, {
+        // update operators: $set and $inc 
+        $inc: { "posts.$.likes" : -1 }
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        log(result)
+    });
 
-//     postBody.appendChild(split);
-//     thePost.appendChild(iconBox);
-//     thePost.appendChild(username);
-//     thePost.appendChild(content);
-//     thePost.appendChild(feedback);
-//     postBody.appendChild(thePost);
+})
 
-// }
+app.patch('/report', async (req, res) => {
 
-// function addFeedbackBox(target) {
-//     const replyBox = document.createElement('form');
-//     replyBox.className = 'replyArea';
-//     const textArea = document.createElement('textarea');
-//     textArea.rows = '8';
-//     textArea.cols = '150';
-//     textArea.placeholder = 'Write Your Post Here';
-//     const reply = document.createElement('input');
-//     reply.className = 'submitReply';
-//     reply.type = 'submit';
-//     reply.value = 'Submit Reply';
-//     const cancel = document.createElement('input');
-//     cancel.className = 'cancel';
-//     cancel.type = 'submit';
-//     cancel.value = 'Cancel';
-//     replyBox.appendChild(textArea);
-//     replyBox.appendChild(reply);
-//     replyBox.appendChild(cancel);
-//     target.appendChild(replyBox);
-// }
+    // if (!ObjectID.isValid(id)) {
+    //     res.status(404).send()
+    // }
+    // find the id of the post
+    let allposts = [];
+    await Post.find().then((post) => {
+        allposts = post
+    }, (error) => {
+        res.status(500).send(error)
+    })
+    const beingmodified = allposts.filter((post) => (post.postContent == req.body.postContent) &&
+        (post.category == req.body.category))
+    
+    // update the post's report attribute
+    Post.findOneAndUpdate({
+        _id: new ObjectID(beingmodified[0]._id)
+    }, {
+        // update operators: $set and $inc 
+        $inc: {
+            reported: 1
+        }
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        log(result)
+    });
 
-// function addReplyPost(target, post) {
-//     const split = document.createElement('div');
-//     split.className = 'postSplit';
-//     const thePost = document.createElement('div');
-//     thePost.className = 'post';
+    // update the information in poster's post list
+    User.findOneAndUpdate({
+        _id: new ObjectID(beingmodified[0].poster), "posts._id": new ObjectID(beingmodified[0]._id)
+    }, {
+        // update operators: $set and $inc 
+        $inc: { "posts.$.reported" : 1, reported: 1}
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        log(result)
+    });
 
-//     const iconBox = document.createElement('div');
-//     iconBox.className = 'posterIconBox';
-//     const icon = document.createElement('img');
-//     icon.className = 'posterIcon';
-//     icon.src = users[post.posterID].photo;
-//     iconBox.appendChild(icon);
+})
 
-//     const username = document.createElement('div');
-//     username.className = 'userName';
-//     const name = document.createTextNode(users[post.posterID].userName);
-//     username.appendChild(name);
 
-//     const content = document.createElement('div');
-//     content.className = 'postContent';
-//     const contents = document.createTextNode(post.postContent);
-//     content.appendChild(contents);
+app.patch('/unreport', async (req, res) => {
 
-//     const feedback = document.createElement('form');
-//     feedback.className = 'feedback';
-//     const likelink = document.createElement('a');
-//     likelink.href = "";
-//     const likeimage = document.createElement('img');
-//     likeimage.className = 'unlike';
-//     likeimage.src = 'unlike.jpg';
-//     likelink.appendChild(likeimage);
-//     const reply = document.createElement('button');
-//     reply.className = 'feedbackButton';
-//     reply.appendChild(document.createTextNode('Reply'));
-//     const report = document.createElement('button');
-//     report.className = 'feedbackButton';
-//     report.appendChild(document.createTextNode('Report'));
-//     feedback.appendChild(likelink);
-//     feedback.appendChild(reply);
-//     feedback.appendChild(report);
+    // if (!ObjectID.isValid(id)) {
+    //     res.status(404).send()
+    // }
+    // find the id of the post
+    let allposts = [];
+    await Post.find().then((post) => {
+        allposts = post
+    }, (error) => {
+        res.status(500).send(error)
+    })
+    const beingmodified = allposts.filter((post) => (post.postContent == req.body.postContent) &&
+        (post.category == req.body.category))
+    
+    // update the post's report attribute
+    Post.findOneAndUpdate({
+        _id: new ObjectID(beingmodified[0]._id)
+    }, {
+        // update operators: $set and $inc 
+        $inc: {
+            reported: -1
+        }
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        log(result)
+    });
 
-//     thePost.appendChild(iconBox);
-//     thePost.appendChild(username);
-//     thePost.appendChild(content);
-//     thePost.appendChild(feedback);
-//     target.appendChild(split);
-//     target.appendChild(thePost);
+    // update the information in poster's post list
+    User.findOneAndUpdate({
+        _id: new ObjectID(beingmodified[0].poster), "posts._id": new ObjectID(beingmodified[0]._id)
+    }, {
+        // update operators: $set and $inc 
+        $inc: { "posts.$.reported" : -1, reported: -1}
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        log(result)
+    });
 
-// }
+})
+
+app.get('/getCurrUser', (req, res) => {
+    User.find({_id: new ObjectID(curr_user)}).then(user => {
+        if (user) {
+            res.send(user[0])
+        }
+        else {
+            res.status(404).send()
+        }
+    }, (error) =>  {
+        log(error)
+    })
+})
+
+app.post('/addPost', async (req, res) => {
+    const post =  new Post ({
+       likes: req.body.likes,
+       reported: req.body.reported,
+       replies: req.body.replies,
+       poster: req.body.poster,
+       postContent: req.body.postContent,
+       category: req.body.category
+    })
+    await post.save().then((result) => {
+        res.send(result)
+    }, (error) => {
+        res.status(400).send(error) // 400 for bad request
+    })
+
+    // update the user's post list
+    let target = {}
+    await Post.find({'postContent': req.body.postContent, 'category': req.body.category}).then(post => {
+        if (post) {
+            target = post[0];
+        }
+    }, (error) => {
+        log(error)
+    })
+
+    User.findOneAndUpdate({
+        _id: new ObjectID(curr_user)
+    }, {
+        // update operators: $set and $inc 
+        $push: { posts: target}
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        log(result)
+    });
+})
+
+app.post('/addReply', async (req, res) => {
+    //1.save post to database
+    const post =  new Post ({
+       likes: req.body.newpost.likes,
+       reported: req.body.newpost.reported,
+       replies: req.body.newpost.replies,
+       poster: req.body.newpost.poster,
+       postContent: req.body.newpost.postContent,
+       category: req.body.newpost.category
+    })
+    await post.save().then((result) => {
+        res.send(result)
+    }, (error) => {
+        res.status(400).send(error) // 400 for bad request
+    })
+
+    //2.update the parent post's reply list
+    let newpost = [];
+    let oldpost = [];
+    await Post.find({'postContent': req.body.newpost.postContent, 'category': req.body.newpost.category}).then(post => {
+        if (post) {
+            newpost = post;
+        }
+    }, (error) => {
+        log(error)
+    })
+    await Post.findOneAndUpdate({
+        'postContent': req.body.oldpost.postContent, 'category': req.body.oldpost.category
+    }, {
+        // update operators: $set and $inc 
+        $push: {"replies": newpost[0]}
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        // log(result)
+    });
+    
+
+    // 3. update the post list of the write who is replying(current logged in user)
+    await User.findOneAndUpdate({
+        _id: new ObjectID(curr_user)
+    }, {
+        // update operators: $set and $inc 
+        $push: { posts: newpost[0]}
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        // log(result)
+    });
+
+    // // 4. update the post list of the author of being replied, by using the result from 2
+    await Post.find({'postContent': req.body.oldpost.postContent, 'category': req.body.oldpost.category}).then(post => {
+        if (post) {
+            oldpost = post;
+        }
+    }, (error) => {
+        log(error)
+    })
+    await User.findOneAndUpdate({
+        _id: new ObjectID(oldpost[0].poster), "posts.postContent": oldpost[0].postContent, "posts.category": oldpost[0].category
+    }, {
+        // update operators: $set and $inc 
+        $push: {"posts.$.replies": newpost[0]}
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        // log(result)
+    });
+
+})
+app.listen(port, () => {
+    log(`Listening on port ${port}...`)
+});

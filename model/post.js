@@ -8,9 +8,9 @@ const PostSchema = new mongoose.Schema({
     poster: String,
     postContent: String,
     category: String
-});
+},  { collection : 'Post' });
 
 const Post = mongoose.model('Post', PostSchema);
 
 
-module.exports = { Post};
+module.exports = { Post };
