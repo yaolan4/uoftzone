@@ -8,16 +8,13 @@ log = console.log
 //Get DOM from html 
 const tableEntries = document.querySelector('#usersTable')
 const removeEntries = document.querySelector('#usersAndposts')
+
 var posts
 var users
 
 //Entries wait for events
 tableEntries.addEventListener('click', changeRemoveStatus)
 removeEntries.addEventListener('click', remove)
-
-
-
-
 
 /**call get function at beginning to get all data */
 getUsersOrPosts()
@@ -41,12 +38,12 @@ function remove(e) {
         removeall()
 
     }
-
 }
 
 /**External data functions */
 /**The following functions  need obtain external severs data first
 */
+
 function deleteInDB(){
     if (document.title == "CSC309 team54 project admin profile:users"){
         for (i = 1; i < tableEntries.children[0].childElementCount ; i++) {

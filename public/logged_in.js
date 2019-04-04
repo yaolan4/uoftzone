@@ -3,11 +3,21 @@ const log = console.log;
 const path = window.location.pathname;
 const postBody = document.querySelector('#postBodyBox');
 const loginBox = document.querySelector('#loginBox');
+//for admin vavigation in admin_q/admin_f/admin_b
+const qA = document.querySelector('#qTab')
+const bE = document.querySelector('#bTab')
+const fF = document.querySelector('#fTab')
+const tabs = document.querySelector('#headerBoxDiv')
+
 
 //* Event listeners for button submit and button click */
 postBody.addEventListener('click', allClickEvents);
 loginBox.addEventListener('click', allClickEvents);
+// tabs.addEventListener('click', allClickEvents);
 
+qA.addEventListener('click', navigate)
+bE.addEventListener('click', navigate)
+fF.addEventListener('click', navigate)
 // log(page);
 
 // Functions that don't edit DOM themselves, but can call DOM functions 
@@ -81,12 +91,51 @@ function allClickEvents(e) {
         recordUnliking(e);
     } else if (e.target.id ==='userIcon' || e.target.id ==='userSpan') {
         goToUserProfile();
+    } else if (e.target.id === 'bTab' ) {
+        navigate('/admin_b');
+    } else if (e.target.id === 'fTab' ) {
+        navigate('/admin_f');
+    } else if (e.target.id === 'qTab' ) {
+        navigate('/admin_q');
+    } else if (e.target.id ==='adminIcon' || e.target.id ==='adminSpan') {
+        goToAdminProfile();
     }
 
 }
 
 function goToUserProfile() {
     const url = '/user_profile';
+
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: 'get',
+        // credentials: 'include', //include in actual log out method
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+    fetch(request)
+        .then((res) => {
+            // Handle response we get from the API
+            // Usually check the error codes to see what happened
+            if (res.status === 200) {
+                console.log(res)
+                window.location.href = res.url;
+            } else {
+                console.log('status not 200')
+                alert('redirect not successful')
+            }
+            console.log(res)
+        }).catch((error) => {
+        alert('redirect not successful')
+        // loginNotSuccessful()
+        console.log(error)
+    })
+}
+
+function goToAdminProfile() {
+    const url = '/admin_profile';
 
     // Create our request constructor with all the parameters we need
     const request = new Request(url, {
@@ -527,4 +576,43 @@ function addReplyPost(target, post) {
         }).catch((error) => {
             console.log(error)
         })
+}
+
+function navigate(e) {
+    let url = '';
+    if(e.target.id === 'qTab') {
+        url='/admin_q'
+    } else if(e.target.id === 'bTab') {
+        url='/admin_b'
+    } else if(e.target.id === 'fTab') {
+        url='/admin_f'
+    }
+
+    console.log('url is ' + url)
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: 'get',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+    fetch(request)
+        .then((res) => {
+            // Handle response we get from the API
+            // Usually check the error codes to see what happened
+            if (res.status === 200) {
+                console.log(res)
+                window.location.href = res.url;
+            } else {
+                console.log('status not 200')
+                alert('navigation not successful')
+
+            }
+            console.log(res)
+        }).catch((error) => {
+        alert('navigation not successful')
+        // loginNotSuccessful()
+        console.log(error)
+    })
 }

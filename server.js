@@ -84,15 +84,25 @@ const sessionChecker = (req, res, next) => {
     }
 }
 
-// Add middleware to check if user/admin logs in and redirect to index if not
+// Add middleware to check if user/admin logs in and redirect to index if not for user
 const checkLoggedIn = (req, res, next) => {
-    if (!req.session.user && !req.session.admin) {
+    if (!req.session.user) {
         res.redirect('/')
     } else {
         next();
     }
 }
 
+//check if admin is logged in
+const checkAdminLoggedIn = (req, res, next) => {
+    if (!req.session.admin) {
+        console.log('admin does not exist!')
+        res.redirect('/')
+    } else {
+        console.log('admin exists!')
+        next();
+    }
+}
 
 app.get('/dashboard', checkLoggedIn, (req, res) => {
     log('send logged_q')
@@ -151,13 +161,19 @@ app.get('/admin', (req, res) => {
 
 //Navigation for admin
 app.get('/admin_profile',authenticateAdmin, (req, res) => {
-	res.sendFile(__dirname + '/public/admin_profile_users.html')
+    if(req.admin) {
+        req.session.admin = req.admin._id;
+        log(req.admin)
+        log(req.session.admin)
+        // res.sendFile(__dirname + '/public/admin_profile_users.html') //put the admin html
+    } else {
+        res.redirect('/')
+    }
 })
 
 app.get('/admin_profile2',authenticateAdmin, (req, res) => {
 	res.sendFile(__dirname + '/public/admin_profile_posts.html')
 })
-
 
 
 app.get('/admin/change_email', authenticateAdmin,(req, res) => {
@@ -166,6 +182,18 @@ app.get('/admin/change_email', authenticateAdmin,(req, res) => {
 
 app.get('/admin/change_password',authenticateAdmin, (req, res) => {
 
+})
+
+app.get('/admin_q', checkAdminLoggedIn, (req, res) => {
+    res.sendFile(__dirname + '/public/admin_q.html')
+})
+
+app.get('/admin_b', checkAdminLoggedIn, (req, res) => {
+    res.sendFile(__dirname + '/public/admin_b.html')
+})
+
+app.get('/admin_f', checkAdminLoggedIn, (req, res) => {
+    res.sendFile(__dirname + '/public/admin_f.html')
 })
 
 app.get('/admins/logout', authenticateAdmin, (req, res) => {
@@ -178,12 +206,6 @@ app.get('/admins/logout', authenticateAdmin, (req, res) => {
         }
     })
 })
-// app.get('/admin/logout', authenticateAdmin, (req, res) => {
-//
-// })
-
-
-
 
 // route for sign up
 app.get('/signup', sessionChecker, (req, res) => {
@@ -231,7 +253,7 @@ app.post('/login', sessionChecker, (req, res) => {
 
                 // req.session.name = admin.name
                 log('found admin :) admin id: ' + req.session.admin)
-                res.redirect('/dashboard')
+                res.redirect('/admin_q')
             }
         }).catch((error) => {
             log(error)
