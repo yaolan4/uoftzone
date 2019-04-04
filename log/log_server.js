@@ -153,6 +153,12 @@ app.post('/login/user', (req, res) => {
 //
 //
 // })
+app.updateEmail('/posts/:id', (req, res) => {
+
+  var user = req.params.id;
+  User.find({email: user});
+  
+}
 
 app.get('/users/logout',  (req, res) => {
     req.session.destroy((error) => {
