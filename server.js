@@ -112,7 +112,7 @@ app.get('/', sessionChecker, (req, res) => {
 
 
 
-//Navigation for  logout 
+//Navigation for  logout
 app.get('/users/logout', authenticateUser, (req, res) => {
     req.session.destroy((error) => {
         if (error) {
@@ -291,10 +291,10 @@ app.delete('/users/:id', authenticateAdmin, (req, res) => {
 	}).catch((error) => {
 		res.status(400).send(error)
 	})
-	
+
 
 })
-	
+
 //Make a post
 app.post('/posts', (req, res) => {
 	const post =  new Post ({
@@ -317,7 +317,7 @@ app.post('/posts', (req, res) => {
 app.get('/posts', (req, res) => {
 	log('I have reached here')
 	Post.find().then((posts) => {
-		res.send({ posts}) 
+		res.send({ posts})
 	}, (error) => {
 		res.status(500).send(error)
 	})
@@ -350,8 +350,8 @@ app.post('/posts/:id', (req, res) => {
 		    res.status(404).send()
 		} else {
 
-			
-			
+
+
 			res.send(reply)
 		}
 	    }).catch((error) => {
@@ -389,15 +389,15 @@ app.post('/posts/:id', (req, res) => {
 	}).catch((error) => {
 		res.status(400).send(error)
 	})
-	
+
 })
 
 
 app.patch('/liked', async (req, res) => {
 
-    // if (!ObjectID.isValid(id)) {
-    //     res.status(404).send()
-    // }
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send()
+    }
     // find the id of the post
     let allposts = [];
     await Post.find().then((post) => {
@@ -407,12 +407,12 @@ app.patch('/liked', async (req, res) => {
     })
     const beingmodified = allposts.filter((post) => (post.postContent == req.body.postContent) &&
         (post.category == req.body.category))
-    
+
     // update the post's like attribute
     Post.findOneAndUpdate({
         _id: new ObjectID(beingmodified[0]._id)
     }, {
-        // update operators: $set and $inc 
+        // update operators: $set and $inc
         $inc: {
             likes: 1
         }
@@ -426,7 +426,7 @@ app.patch('/liked', async (req, res) => {
     User.findOneAndUpdate({
         _id: new ObjectID(beingmodified[0].poster), "posts._id": new ObjectID(beingmodified[0]._id)
     }, {
-        // update operators: $set and $inc 
+        // update operators: $set and $inc
         $inc: { "posts.$.likes" : 1 }
     }, {
         returnOriginal: false // gives us back updated arguemnt
@@ -438,9 +438,9 @@ app.patch('/liked', async (req, res) => {
 
 app.patch('/unliked', async (req, res) => {
 
-    // if (!ObjectID.isValid(id)) {
-    //     res.status(404).send()
-    // }
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send()
+    }
     // find the id of the post
     let allposts = [];
     await Post.find().then((post) => {
@@ -450,12 +450,12 @@ app.patch('/unliked', async (req, res) => {
     })
     const beingmodified = allposts.filter((post) => (post.postContent == req.body.postContent) &&
         (post.category == req.body.category))
-    
+
     // update the post's like attribute
     Post.findOneAndUpdate({
         _id: new ObjectID(beingmodified[0]._id)
     }, {
-        // update operators: $set and $inc 
+        // update operators: $set and $inc
         $inc: {
             likes: -1
         }
@@ -469,7 +469,7 @@ app.patch('/unliked', async (req, res) => {
     User.findOneAndUpdate({
         _id: new ObjectID(beingmodified[0].poster), "posts._id": new ObjectID(beingmodified[0]._id)
     }, {
-        // update operators: $set and $inc 
+        // update operators: $set and $inc
         $inc: { "posts.$.likes" : -1 }
     }, {
         returnOriginal: false // gives us back updated arguemnt
@@ -481,9 +481,9 @@ app.patch('/unliked', async (req, res) => {
 
 app.patch('/report', async (req, res) => {
 
-    // if (!ObjectID.isValid(id)) {
-    //     res.status(404).send()
-    // }
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send()
+    }
     // find the id of the post
     let allposts = [];
     await Post.find().then((post) => {
@@ -493,12 +493,12 @@ app.patch('/report', async (req, res) => {
     })
     const beingmodified = allposts.filter((post) => (post.postContent == req.body.postContent) &&
         (post.category == req.body.category))
-    
+
     // update the post's report attribute
     Post.findOneAndUpdate({
         _id: new ObjectID(beingmodified[0]._id)
     }, {
-        // update operators: $set and $inc 
+        // update operators: $set and $inc
         $inc: {
             reported: 1
         }
@@ -512,7 +512,7 @@ app.patch('/report', async (req, res) => {
     User.findOneAndUpdate({
         _id: new ObjectID(beingmodified[0].poster), "posts._id": new ObjectID(beingmodified[0]._id)
     }, {
-        // update operators: $set and $inc 
+        // update operators: $set and $inc
         $inc: { "posts.$.reported" : 1, reported: 1}
     }, {
         returnOriginal: false // gives us back updated arguemnt
@@ -525,9 +525,9 @@ app.patch('/report', async (req, res) => {
 
 app.patch('/unreport', async (req, res) => {
 
-    // if (!ObjectID.isValid(id)) {
-    //     res.status(404).send()
-    // }
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send()
+    }
     // find the id of the post
     let allposts = [];
     await Post.find().then((post) => {
@@ -537,12 +537,12 @@ app.patch('/unreport', async (req, res) => {
     })
     const beingmodified = allposts.filter((post) => (post.postContent == req.body.postContent) &&
         (post.category == req.body.category))
-    
+
     // update the post's report attribute
     Post.findOneAndUpdate({
         _id: new ObjectID(beingmodified[0]._id)
     }, {
-        // update operators: $set and $inc 
+        // update operators: $set and $inc
         $inc: {
             reported: -1
         }
@@ -556,7 +556,7 @@ app.patch('/unreport', async (req, res) => {
     User.findOneAndUpdate({
         _id: new ObjectID(beingmodified[0].poster), "posts._id": new ObjectID(beingmodified[0]._id)
     }, {
-        // update operators: $set and $inc 
+        // update operators: $set and $inc
         $inc: { "posts.$.reported" : -1, reported: -1}
     }, {
         returnOriginal: false // gives us back updated arguemnt
@@ -608,7 +608,7 @@ app.post('/addPost', checkLoggedIn, async (req, res) => {
     User.findOneAndUpdate({
         _id: new ObjectID(curr_user)
     }, {
-        // update operators: $set and $inc 
+        // update operators: $set and $inc
         $push: { posts: target}
     }, {
         returnOriginal: false // gives us back updated arguemnt
@@ -646,20 +646,20 @@ app.post('/addReply', checkLoggedIn, async (req, res) => {
     await Post.findOneAndUpdate({
         'postContent': req.body.oldpost.postContent, 'category': req.body.oldpost.category
     }, {
-        // update operators: $set and $inc 
+        // update operators: $set and $inc
         $push: {"replies": newpost[0]}
     }, {
         returnOriginal: false // gives us back updated arguemnt
     }).then((result) => {
         // log(result)
     });
-    
+
 
     // 3. update the post list of the write who is replying(current logged in user)
     await User.findOneAndUpdate({
         _id: new ObjectID(curr_user)
     }, {
-        // update operators: $set and $inc 
+        // update operators: $set and $inc
         $push: { posts: newpost[0]}
     }, {
         returnOriginal: false // gives us back updated arguemnt
@@ -678,7 +678,7 @@ app.post('/addReply', checkLoggedIn, async (req, res) => {
     await User.findOneAndUpdate({
         _id: new ObjectID(oldpost[0].poster), "posts.postContent": oldpost[0].postContent, "posts.category": oldpost[0].category
     }, {
-        // update operators: $set and $inc 
+        // update operators: $set and $inc
         $push: {"posts.$.replies": newpost[0]}
     }, {
         returnOriginal: false // gives us back updated arguemnt
@@ -740,5 +740,3 @@ app.post('/admins', (req, res) => {
 app.listen(port, () => {
 	log(`Listening on port ${port}...`)
 });
-
-
