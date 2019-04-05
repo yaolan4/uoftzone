@@ -23,13 +23,13 @@ fF.addEventListener('click', navigate)
 
 // update the current page
 let category;
-if (path.includes('logged_q')) {
+if (path.includes('logged_q')|| path.includes('admin_q')) {
     category = 'Q&A'
 }
-else if (path.includes('logged_b')) {
+else if (path.includes('logged_b') || path.includes('admin_b') ) {
     category = 'BookExchange'
 }
-else if (path.includes('logged_f')) {
+else if (path.includes('logged_f') || path.includes('admin_f')) {
     category = 'FreeFood'
 }
 getAllUser();

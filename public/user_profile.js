@@ -109,7 +109,7 @@ function deleteInDB(){
     for (i = 1; i < tableEntries.children[0].childElementCount ; i++) {
             content = tableEntries.children[0].children[i].children[0].innerText
             likes = tableEntries.children[0].children[i].children[1].innerText
-            replies = tableEntries.children[0].children[i].children[1].innerText
+            replies = tableEntries.children[0].children[i].children[2].innerText
             //users = getUsersOrPosts()
             //console.log(users)
     
