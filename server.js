@@ -79,7 +79,7 @@ const authenticateAdmin = (req, res, next) => {
 //to check if user or admin exists, directly jumped to dashboard if so
 const sessionChecker = (req, res, next) => {
     if (req.session.user || req.session.admin) {
-        res.redirect('dashboard')
+        res.redirect('logged_q')
     } else {
         next();
     }
@@ -105,7 +105,7 @@ const checkAdminLoggedIn = (req, res, next) => {
     }
 }
 
-app.get('/dashboard', checkLoggedIn, (req, res) => {
+app.get('/logged_q', checkLoggedIn, (req, res) => {
     log('send logged_q')
     res.sendFile(__dirname + '/public/logged_q.html')
 })
@@ -260,7 +260,7 @@ app.post('/login', sessionChecker, (req, res) => {
                 log(req.session.user)
                 // req.session.name = user.name
                 log('found user :)')
-                res.redirect('/dashboard')
+                res.redirect('/logged_q')
             }
         }).catch((error) => {
             log(error)
@@ -443,9 +443,6 @@ app.post('/posts/:id', (req, res) => {
 
 app.patch('/liked', async (req, res) => {
 
-    if (!ObjectID.isValid(id)) {
-        res.status(404).send()
-    }
     // find the id of the post
     let allposts = [];
     await Post.find().then((post) => {
@@ -486,9 +483,6 @@ app.patch('/liked', async (req, res) => {
 
 app.patch('/unliked', async (req, res) => {
 
-    if (!ObjectID.isValid(id)) {
-        res.status(404).send()
-    }
     // find the id of the post
     let allposts = [];
     await Post.find().then((post) => {
@@ -529,9 +523,6 @@ app.patch('/unliked', async (req, res) => {
 
 app.patch('/report', async (req, res) => {
 
-    if (!ObjectID.isValid(id)) {
-        res.status(404).send()
-    }
     // find the id of the post
     let allposts = [];
     await Post.find().then((post) => {
@@ -541,7 +532,9 @@ app.patch('/report', async (req, res) => {
     })
     const beingmodified = allposts.filter((post) => (post.postContent == req.body.postContent) &&
         (post.category == req.body.category))
-
+    log(req.body)
+    log(allposts)
+    log(beingmodified)
     // update the post's report attribute
     Post.findOneAndUpdate({
         _id: new ObjectID(beingmodified[0]._id)
@@ -573,9 +566,6 @@ app.patch('/report', async (req, res) => {
 
 app.patch('/unreport', async (req, res) => {
 
-    if (!ObjectID.isValid(id)) {
-        res.status(404).send()
-    }
     // find the id of the post
     let allposts = [];
     await Post.find().then((post) => {
@@ -645,7 +635,7 @@ app.post('/addPost', checkLoggedIn, async (req, res) => {
 
     // update the user's post list
     let target = {}
-    await posts.find({'postContent': req.body.postContent, 'category': req.body.category}).then(post => {
+    await Post.find({'postContent': req.body.postContent, 'category': req.body.category}).then(post => {
         if (post) {
             target = post[0];
         }
@@ -654,7 +644,7 @@ app.post('/addPost', checkLoggedIn, async (req, res) => {
     })
 
     User.findOneAndUpdate({
-        _id: new ObjectID(curr_user)
+        _id: new ObjectID(req.session.user)
     }, {
         // update operators: $set and $inc
         $push: { posts: target}
@@ -705,7 +695,7 @@ app.post('/addReply', checkLoggedIn, async (req, res) => {
 
     // 3. update the post list of the write who is replying(current logged in user)
     await User.findOneAndUpdate({
-        _id: new ObjectID(curr_user)
+        _id: new ObjectID(req.session.user)
     }, {
         // update operators: $set and $inc
         $push: { posts: newpost[0]}
@@ -723,6 +713,7 @@ app.post('/addReply', checkLoggedIn, async (req, res) => {
     }, (error) => {
         log(error)
     })
+    log(oldpost);
     await User.findOneAndUpdate({
         _id: new ObjectID(oldpost[0].poster), "posts.postContent": oldpost[0].postContent, "posts.category": oldpost[0].category
     }, {

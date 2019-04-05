@@ -23,21 +23,20 @@ fF.addEventListener('click', navigate)
 async function getCurrUser(){
     const url = '/getCurrUser'
     fetch(url)
-
-    await fetch(url)
     .then((res) => { 
         if (res.status === 200) {
-           return res.json
+           return res.json() 
        } else {
-            alert('Could not get user')
+            alert('Could not get students')
        }                
     })
     .then((json) => {
-        // do somestuff here
-    }, (error) => {
-        log(error);
+        // log(json)
+    }).catch((error) => {
+        console.log(error)
     })
 }
+getCurrUser();
 
 // Functions that don't edit DOM themselves, but can call DOM functions 
 function allClickEvents(e) {
@@ -46,13 +45,13 @@ function allClickEvents(e) {
     if (e.target.value == 'Submit') {
         if (e.target.parentElement.children[0].value != '') {
             let category = ''
-            if (path.includes('logged_q.html')) {
+            if (path.includes('logged_q')) {
                 category = 'Q&A'
             }
-            else if (path.includes('logged_b.html')) {
+            else if (path.includes('logged_b')) {
                 category = 'BookExchange'
             }
-            else if (path.includes('logged_f.html')) {
+            else if (path.includes('logged_f')) {
                 category = 'FreeFood'
             }
             const post = {
@@ -82,13 +81,13 @@ function allClickEvents(e) {
     }
     else if (e.target.classList.contains('submitReply')) {
         let category = ''
-        if (path.includes('logged_q.html')) {
+        if (path.includes('logged_q')) {
             category = 'Q&A'
         }
-        else if (path.includes('logged_b.html')) {
+        else if (path.includes('logged_b')) {
             category = 'BookExchange'
         }
-        else if (path.includes('logged_f.html')) {
+        else if (path.includes('logged_f')) {
             category = 'FreeFood'
         }
         const post = {
@@ -180,13 +179,13 @@ function goToAdminProfile() {
 function recordLiking(e) {
     // get the necessary of the liked post data
     let category = ''
-    if (path.includes('logged_q.html')) {
+    if (path.includes('logged_q')) {
         category = 'Q&A'
     }
-    else if (path.includes('logged_b.html')) {
+    else if (path.includes('logged_b')) {
         category = 'BookExchange'
     }
-    else if (path.includes('logged_f.html')) {
+    else if (path.includes('logged_f')) {
         category = 'FreeFood'
     }
     const target = e.target.parentElement.parentElement.parentElement
@@ -225,13 +224,13 @@ function recordLiking(e) {
 function recordUnliking(e) {
     // get the necessary of the liked post data
     let category = ''
-    if (path.includes('logged_q.html')) {
+    if (path.includes('logged_q')) {
         category = 'Q&A'
     }
-    else if (path.includes('logged_b.html')) {
+    else if (path.includes('logged_b')) {
         category = 'BookExchange'
     }
-    else if (path.includes('logged_f.html')) {
+    else if (path.includes('logged_f')) {
         category = 'FreeFood'
     }
     const target = e.target.parentElement.parentElement.parentElement
@@ -270,13 +269,13 @@ function recordUnliking(e) {
 function recordReport(e) {
     // get the necessary of the reported post data
     let category = ''
-    if (path.includes('logged_q.html')) {
+    if (path.includes('logged_q')) {
         category = 'Q&A'
     }
-    else if (path.includes('logged_b.html')) {
+    else if (path.includes('logged_b')) {
         category = 'BookExchange'
     }
-    else if (path.includes('logged_f.html')) {
+    else if (path.includes('logged_f')) {
         category = 'FreeFood'
     }
     const target = e.target.parentElement.parentElement
@@ -316,13 +315,13 @@ function recordReport(e) {
 function recordUnreport(e) {
     // get the necessary of the reported post data
     let category = ''
-    if (path.includes('logged_q.html')) {
+    if (path.includes('logged_q')) {
         category = 'Q&A'
     }
-    else if (path.includes('logged_b.html')) {
+    else if (path.includes('logged_b')) {
         category = 'BookExchange'
     }
-    else if (path.includes('logged_f.html')) {
+    else if (path.includes('logged_f')) {
         category = 'FreeFood'
     }
     const target = e.target.parentElement.parentElement
@@ -373,6 +372,7 @@ function addPostToPostBox(post) {
             }
         })
         .then((json) => {
+            log(json);
             // adding dynamic html
             const split = document.createElement('div');
             split.className = 'postSplit';
@@ -388,7 +388,7 @@ function addPostToPostBox(post) {
 
             const username = document.createElement('div');
             username.className = 'userName';
-            const name = document.createTextNode(json.name);
+            const name = document.createTextNode(json[0].name);
             username.appendChild(name);
 
             const content = document.createElement('div');
@@ -426,7 +426,7 @@ function addPostToPostBox(post) {
                 likes: 0,
                 reported: 0,
                 replies: [],
-                poster: json._id,
+                poster: json[0]._id,
                 postContent: post.postContent,
                 category: post.category
             }
@@ -516,7 +516,7 @@ function addReplyPost(target, post) {
 
             const username = document.createElement('div');
             username.className = 'userName';
-            const name = document.createTextNode(json.name);
+            const name = document.createTextNode(json[0].name);
             username.appendChild(name);
 
             const content = document.createElement('div');
@@ -554,7 +554,7 @@ function addReplyPost(target, post) {
                 likes: 0,
                 reported: 0,
                 replies: [],
-                poster: json._id,
+                poster: json[0]._id,
                 postContent: post.postContent,
                 category: post.category
             }
@@ -592,6 +592,7 @@ function addReplyPost(target, post) {
 }
 
 function navigate(e) {
+    e.preventDefault();
     let url = '';
     if (e.target.id === 'qTab' && document.title === 'Admin Dashboard') {
         url = '/admin_q'
