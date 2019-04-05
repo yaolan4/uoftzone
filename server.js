@@ -344,7 +344,7 @@ app.delete('/users/:id', authenticateAdmin, (req, res) => {
 })
 
 //Make a post
-app.post('/posts', (req, res) => {
+app.post('/posts', authenticateUser, (req, res) => {
 	const post =  new Post ({
 		   likes: req.body.likes,
        reported: req.body.reported,
@@ -362,7 +362,7 @@ app.post('/posts', (req, res) => {
 })
 
 //Get all posts
-app.get('/posts', (req, res) => {
+app.get('/posts', authenticateAdmin, (req, res) => {
 	log('I have reached here')
 	Post.find().then((posts) => {
 		res.send({ posts})
@@ -372,7 +372,7 @@ app.get('/posts', (req, res) => {
 })
 
 //Make reply to a post
-app.post('/posts/:id', (req, res) => {
+app.post('/posts/:id', authenticateUser, (req, res) => {
 
   const id = req.params.id
 
@@ -408,7 +408,7 @@ app.post('/posts/:id', (req, res) => {
 })
 
 //Delete a post and all its replies
- app.delete('/posts/:id', (req, res) => {
+ app.delete('/posts/:id', authenticateUser, (req, res) => {
 	const id = req.params.id
 
 	if (!ObjectID.isValid(id)) {
@@ -441,7 +441,7 @@ app.post('/posts/:id', (req, res) => {
 })
 
 
-app.patch('/liked', async (req, res) => {
+app.patch('/liked', authenticateUser, async (req, res) => {
 
     if (!ObjectID.isValid(id)) {
         res.status(404).send()
@@ -484,7 +484,7 @@ app.patch('/liked', async (req, res) => {
 
 })
 
-app.patch('/unliked', async (req, res) => {
+app.patch('/unliked', authenticateUser, async (req, res) => {
 
     if (!ObjectID.isValid(id)) {
         res.status(404).send()
@@ -527,7 +527,7 @@ app.patch('/unliked', async (req, res) => {
 
 })
 
-app.patch('/report', async (req, res) => {
+app.patch('/report', authenticateUser, async (req, res) => {
 
     if (!ObjectID.isValid(id)) {
         res.status(404).send()
@@ -571,7 +571,7 @@ app.patch('/report', async (req, res) => {
 })
 
 
-app.patch('/unreport', async (req, res) => {
+app.patch('/unreport', authenticateUser, async (req, res) => {
 
     if (!ObjectID.isValid(id)) {
         res.status(404).send()
