@@ -1,6 +1,3 @@
-const content = document.querySelector('#content');
-const password = document.querySelector('#newEmail');
-const email = document.querySelector('#repeatEmail');
 
 //* Event listeners for button submit and button click */
 window.onload=function(){
@@ -11,27 +8,37 @@ window.onload=function(){
 // Functions that don't edit DOM themselves, but can call DOM functions
 function sub(e) {
     e.preventDefault();
-    console.log("Yo");
-    var x = document.getElementById("oldEmail");
-    var username = x.value;
-    console.log(username);
-    var url = '/change_email/' + username;
-    fetch(url, {
-        method: 'updateEmail'
-    })
-
-    .then((res) => {
-        if (res.status === 200) {
-           return res.json()
-       } else {
-            alert('Could not find email')
-       }
-    })
-    .then((json) => {
-            console.log(json)
-
-
-    }).catch((error) => {
-        console.log(error)
-    })
+    if (document.getElementById("newEmail").value != document.getElementById("repeatEmail").value) {
+        alert('repeated email does not match your new email');
+    }
+    else if (document.getElementById("oldEmail").value == document.getElementById("newEmail").value) {
+        alert('new email is the same as your old email! please choose another email');
+    }
+    else {
+        const oldEmail = document.getElementById("oldEmail").value;
+        const newEmail = document.getElementById("newEmail").value;
+        const  url = '/updateEmail';
+        const data = {oldEmail, newEmail}
+        const request = new Request(url, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+        });
+        fetch(request)
+            .then((res) => {
+                // Handle response we get from the API
+                if (res.status == 200) {
+                    alert('Success')
+                }
+                else {
+                    alert('Your old email is incorrect!')
+                }
+                log(res)
+            }).catch((error) => {
+            console.log(error)
+        })
+    }
 }

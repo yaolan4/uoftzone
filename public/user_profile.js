@@ -1,5 +1,22 @@
 /* admin js for team 54 project */
 
+url = '/getCurrUser';
+fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            alert('Could not get students')
+       }                
+    })
+    .then((json) => {
+        // log(json[0])
+        const userInfo = document.querySelector('#profileInf');
+        userInfo.children[0].children[0].innerText = json[0].name;
+        userInfo.children[1].children[0].innerText = json[0].email;
+    }).catch((error) => {
+        console.log(error)
+    })
 
 const removePosts = [] //Array of posts to remove
 var posts //var to keep posts
