@@ -93,7 +93,7 @@ function allClickEvents(e) {
         userSignUp();
 
     }
-
+}
 
 // DOM functions
 
