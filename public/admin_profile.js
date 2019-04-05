@@ -131,7 +131,6 @@ function deleteInDB(){
             if (removeUsers.includes(username) && same.length > 0){
                 user = same[0]
                 deleteUsersOrPosts(user._id)
-                getUsersOrPosts()
                 index = users.indexOf(user);
                 users.splice(index,1);
 
