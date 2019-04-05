@@ -210,15 +210,23 @@ app.get('/admin_profile_posts', authenticateAdmin, (req, res) => {
 
 //Admin side navagation
 app.get('/admin/change_email', authenticateAdmin,(req, res) => {
-
+    res.sendFile(__dirname + '/public/change_email_admin.html')
 })
 
 app.get('/admin/change_password',authenticateAdmin, (req, res) => {
-
+    res.sendFile(__dirname + '/public/change_pswd_admin.html')
 })
 
 app.get('/admin_q', checkAdminLoggedIn, (req, res) => {
     res.sendFile(__dirname + '/public/admin_q.html')
+})
+
+app.get('/user/change_email', authenticateUser,(req, res) => {
+    res.sendFile(__dirname + '/public/change_email.html')
+})
+
+app.get('/user/change_password',authenticateUser, (req, res) => {
+    res.sendFile(__dirname + '/public/change_pswd.html')
 })
 
 app.get('/admin_b', checkAdminLoggedIn, (req, res) => {
@@ -819,7 +827,56 @@ app.post('/admins', (req, res) => {
     })
 })
 
+app.patch('/updateEmail', (req, res) => {
 
+    User.findOneAndUpdate({
+     "_id": new ObjectID(req.session.user), "email": req.body.oldEmail
+    }, {
+        // update operators: $set and $inc
+        $set: {email: req.body.newEmail}
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        if (result == null) {
+            res.status(404).send();
+        }
+        else {
+            res.status(200).send()
+        }
+    });
+
+})
+
+
+// app.patch('/updatePassword', async (req, res) => {
+
+//     let currUser = {};
+//     await User.find({'postContent': req.body.oldpost.postContent, 'category': req.body.oldpost.category}).then(user => {
+//         if (user) {
+//             currUser = user;
+//         }
+//     }, (error) => {
+//         log(error)
+//     })
+//     User.methods.comparePassword = {()
+
+//     }
+//     User.findOneAndUpdate({
+//      "_id": new ObjectID(req.session.user)
+//     }, {
+//         // update operators: $set and $inc
+//         $set: {email: req.body.newEmail}
+//     }, {
+//         returnOriginal: false // gives us back updated arguemnt
+//     }).then((result) => {
+//         if (result == null) {
+//             res.status(404).send();
+//         }
+//         else {
+//             res.status(200).send()
+//         }
+//     });
+// })
 
 
 
