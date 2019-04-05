@@ -60,19 +60,17 @@ const authenticateUser = (req, res, next) => {
 
 // Middleware for authentication for resources
 const authenticateAdmin = (req, res, next) => {
-    if (req.session.admin === 1) {
-        req.admin = 1
-        next()
-        // Admin.finext()ndById(req.session.admin).then((admin) => {
-        //     if (!admin) {
-        //         return Promise.reject()
-        //     } else {
-        //         req.admin = admin
-        //
-        //     }
-        // }).catch((error) => {
-        //     res.redirect('/')
-        // })
+    if (req.session.admin) {
+        Admin.findById(req.session.admin).then((admin) => {
+            if (!admin) {
+                return Promise.reject()
+            } else {
+                req.admin = admin
+                next()
+            }
+        }).catch((error) => {
+            res.redirect('/')
+        })
     } else {
         res.redirect('/')
     }
@@ -139,8 +137,14 @@ app.get('/users/logout', authenticateUser, (req, res) => {
 
 //use what's in admin_server to check authenticaZtion of admin_Server
 //Get all users
-
-
+app.get('/getAllUser', authenticateUser, (req, res) => {
+    log('I have reached here')
+    User.find().then((user) => {
+        res.send(user)
+    }, (error) => {
+        res.status(500).send(error)
+    })
+})
 
 
 
@@ -189,7 +193,7 @@ app.get('/logged_f', checkLoggedIn, (req, res) => {
 //go to admin profile users
 app.get('/admin_profile_users', authenticateAdmin, (req, res) => {
     if(req.admin) {
-        req.session.admin = req.admin;
+        req.session.admin = req.admin._id;
         log(req.admin)
         log(req.session.admin)
         res.sendFile(__dirname + '/public/admin_profile_users.html')
@@ -201,7 +205,7 @@ app.get('/admin_profile_users', authenticateAdmin, (req, res) => {
 //go to admin profile posts
 app.get('/admin_profile_posts', authenticateAdmin, (req, res) => {
     if(req.admin) {
-        req.session.admin = req.admin;
+        req.session.admin = req.admin._id;
         log(req.admin)
         log(req.session.admin)
         res.sendFile(__dirname + '/public/admin_profile_posts.html')
@@ -284,27 +288,24 @@ app.post('/login', sessionChecker, (req, res) => {
             log(error)
             res.status(400).send(error)
         })
-    } else if(name.toLowerCase() === 'admin' && password.toLowerCase() === 'admin' ) {
-                req.session.admin = 1;
+    } else {
+        Admin.findByNamePassword(name, password).then((admin) => {
+            if (!admin) {
+                log('no matching admin :(')
+                res.redirect('/login')
+            } else {
+                // Add the user to the session cookie that we will
+                // send to the client
+                req.session.admin = admin._id;
+
+                // req.session.name = admin.name
                 log('found admin :) admin id: ' + req.session.admin)
                 res.redirect('/admin_q')
-        // Admin.findByNamePassword(name, password).then((admin) => {
-        //     if (!admin) {
-        //         log('no matching admin :(')
-        //         res.redirect('/login')
-        //     } else {
-        //         // Add the user to the session cookie that we will
-        //         // send to the client
-        //         req.session.admin = admin._id;
-        //
-        //         // req.session.name = admin.name
-        //         log('found admin :) admin id: ' + req.session.admin)
-        //         res.redirect('/admin_q')
-        //     }
-        // }).catch((error) => {
-        //     log(error)
-        //     res.status(400).send(error)
-        // })
+            }
+        }).catch((error) => {
+            log(error)
+            res.status(400).send(error)
+        })
     }
 })
 
