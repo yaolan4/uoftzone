@@ -126,6 +126,14 @@ app.get('/users/logout', authenticateUser, (req, res) => {
 
 //use what's in admin_server to check authenticaZtion of admin_Server
 //Get all users
+app.get('/getAllUser', authenticateUser, (req, res) => {
+    User.find().then((user) => {
+        res.send(user)
+    }, (error) => {
+        res.status(500).send(error)
+    })
+})
+
 
 //Navigation for guest
 
