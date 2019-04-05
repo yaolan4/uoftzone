@@ -90,7 +90,7 @@ function allClickEvents(e) {
     if (e.target.id === 'submitButton' || e.target.id === 'submitLink') {
         //match the user and pswd through server
         console.log('username is ' + username.value + 'password is ' + password.value);
-        userSignUp();
+        // userSignUp();
 
     }
 }
