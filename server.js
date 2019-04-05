@@ -270,9 +270,6 @@ app.post('/login', sessionChecker, (req, res) => {
         log('found admin :) admin id: ' + req.session.admin)
         res.redirect('/admin_q')
     }
-}).catch((error) => {
-    log(error)
-    res.status(400).send(error)
 })
 
 //user sign up
