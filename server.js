@@ -714,9 +714,8 @@ app.post('/addReply', checkLoggedIn, async (req, res) => {
         log(error)
     })
     log(oldpost);
-    await User.findOneAndUpdate({
-        _id: new ObjectID(oldpost[0].poster), "posts.postContent": oldpost[0].postContent, "posts.category": oldpost[0].category
-    }, {
+    await User.findOneAndUpdate(
+        {$and:[{"_id":new ObjectID(oldpost[0].poster)},{"posts.postContent":oldpost[0].postContent},{"posts.category":oldpost[0].category}]}, {
         // update operators: $set and $inc
         $push: {"posts.$.replies": newpost[0]}
     }, {
