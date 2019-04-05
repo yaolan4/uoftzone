@@ -19,26 +19,137 @@ qA.addEventListener('click', navigate)
 bE.addEventListener('click', navigate)
 fF.addEventListener('click', navigate)
 
-// log(page);
 
-async function getCurrUser() {
-    const url = '/getCurrUser'
+
+// update the current page
+let category;
+if (path.includes('logged_q')) {
+    category = 'Q&A'
+}
+else if (path.includes('logged_b')) {
+    category = 'BookExchange'
+}
+else if (path.includes('logged_f')) {
+    category = 'FreeFood'
+}
+getAllUser();
+
+function getAllUser() {
+    const url = '/getAllUser';
     fetch(url)
-        .then((res) => {
-            if (res.status === 200) {
-                return res.json()
-            } else {
-                alert('Could not get students')
+    .then(res => { 
+        if (res.status === 200) {
+            return res.json()
+       } else {
+            alert('Could not get all user')
+       }                
+    })
+    .then((json) => {
+        for (let i = 0; i < json.length; i++) {
+            for (let j = 0; j < json[i].posts.length; j++) {
+                if (json[i].posts[j].category == category) {
+                    const split = document.createElement('div');
+                    split.className = 'postSplit';
+                    const parentPost = document.createElement('div');
+                    parentPost.className = 'post';
+
+                    const iconBox = document.createElement('div');
+                    iconBox.className = 'posterIconBox';
+                    const icon = document.createElement('img');
+                    icon.className = 'posterIcon';
+                    icon.src = "signicon.jpg";
+                    iconBox.appendChild(icon);
+
+                    const username = document.createElement('div');
+                    username.className = 'userName';
+                    const name = document.createTextNode(json[i].name);
+                    username.appendChild(name);
+
+                    const content = document.createElement('div');
+                    content.className = 'postContent';
+                    const contents = document.createTextNode(json[i].posts[j].postContent);
+                    content.appendChild(contents);
+
+                    const feedback = document.createElement('form');
+                    feedback.className = 'feedback';
+                    const likelink = document.createElement('a');
+                    likelink.href = "";
+                    const likeimage = document.createElement('img');
+                    likeimage.className = 'unlike';
+                    likeimage.src = 'unlike.jpg';
+                    likelink.appendChild(likeimage);
+                    const reply = document.createElement('button');
+                    reply.className = 'feedbackButton';
+                    reply.appendChild(document.createTextNode('Reply'));
+                    const report = document.createElement('button');
+                    report.className = 'feedbackButton';
+                    report.appendChild(document.createTextNode('Report'));
+                    feedback.appendChild(likelink);
+                    feedback.appendChild(reply);
+                    feedback.appendChild(report);
+
+                    postBody.appendChild(split);
+                    parentPost.appendChild(iconBox);
+                    parentPost.appendChild(username);
+                    parentPost.appendChild(content);
+                    parentPost.appendChild(feedback);
+                    postBody.appendChild(parentPost);
+                    if (json[i].posts[j].replies.length != 0) {
+                        const split = document.createElement('div');
+                        split.className = 'postSplit';
+                        const thePost = document.createElement('div');
+                        thePost.className = 'post';
+
+                        const iconBox = document.createElement('div');
+                        iconBox.className = 'posterIconBox';
+                        const icon = document.createElement('img');
+                        icon.className = 'posterIcon';
+                        icon.src = 'signicon.jpg';
+                        iconBox.appendChild(icon);
+
+                        const username = document.createElement('div');
+                        username.className = 'userName';
+                        const temp = json.filter((user) => user._id == json[i].posts[j].replies.poster);
+                        const name = document.createTextNode(temp);
+                        username.appendChild(name);
+
+                        const content = document.createElement('div');
+                        content.className = 'postContent';
+                        const contents = document.createTextNode(json[i].posts[j].replies.postContent);
+                        content.appendChild(contents);
+
+                        const feedback = document.createElement('form');
+                        feedback.className = 'feedback';
+                        const likelink = document.createElement('a');
+                        likelink.href = "";
+                        const likeimage = document.createElement('img');
+                        likeimage.className = 'unlike';
+                        likeimage.src = 'unlike.jpg';
+                        likelink.appendChild(likeimage);
+                        const reply = document.createElement('button');
+                        reply.className = 'feedbackButton';
+                        reply.appendChild(document.createTextNode('Reply'));
+                        const report = document.createElement('button');
+                        report.className = 'feedbackButton';
+                        report.appendChild(document.createTextNode('Report'));
+                        feedback.appendChild(likelink);
+                        feedback.appendChild(reply);
+                        feedback.appendChild(report);
+
+                        thePost.appendChild(iconBox);
+                        thePost.appendChild(username);
+                        thePost.appendChild(content);
+                        thePost.appendChild(feedback);
+                        parentPost.appendChild(split);
+                        parentPost.appendChild(thePost);
+                    }
+                }
             }
-        })
-        .then((json) => {
-            // log(json)
-        }).catch((error) => {
-        console.log(error)
+        }
     })
 }
 
-// getCurrUser();
+
 
 // Functions that don't edit DOM themselves, but can call DOM functions 
 function allClickEvents(e) {
@@ -484,7 +595,6 @@ function addFeedbackBox(target) {
 }
 
 function addReplyPost(target, post) {
-
     // Instructions to perform this task:
     // 1. Create a post the save the post to db
     // 2. Update the reply list of the being replied post
