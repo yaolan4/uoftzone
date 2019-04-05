@@ -89,30 +89,6 @@ function allClickEvents(e) {
         //match the user and pswd through server
         console.log('username is ' + username.value + 'password is ' + password.value);
 
-
-        // if (username.value === 'user' && password.value === 'user')  {
-        //     const a = document.querySelector('#submitLink');
-        //     a.setAttribute("href", "../main_sections/logged_q.html");
-        //
-        //     console.log('user logged in')
-        // } else if (username.value === 'admin' && password.value === 'admin'){
-        //     const a = document.querySelector('#submitLink');
-        //     a.setAttribute("href", "../main_sections/admin_q.html");
-        //
-        //     console.log('admin logged in')
-        //
-        // } else{
-        //     //prompt user username and password does not match or username does not exist
-        //     //manipulate dom to let users know that log in not successful
-        //     console.log('log in not successful');
-        //
-        //      if (!signIn.lastElementChild.classList.contains('red')) {
-        //             loginNotSuccessful();
-        //     }
-        //
-        // }
-    } else if (e.target.id === 'loginBox' || e.target.id === 'title') {
-        userNotLogin(); //back to home page
     }
 }
 
