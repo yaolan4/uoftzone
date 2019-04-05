@@ -17,6 +17,9 @@ removeEntries.addEventListener('click', remove)
 logOut.addEventListener('click', userLogOut)
 logOutButton.addEventListener('click', userLogOut)
 
+log = console.log
+getCurrUser()
+
 /**Local use functions */
 /**The following functions does not need external severs data
  and can be used just using local data
@@ -31,8 +34,10 @@ function changeRemoveStatus(e) {
 function remove(e) {
     e.preventDefault();
     if (e.target.classList.contains('remove') ) {
-        removeall()
+
         deleteInDB()
+        removeall()
+     
 
     }
 
@@ -76,20 +81,6 @@ function userLogOut() {
     })
 }
 
-function addPost(){
-    // Get a new post information from server
-    // code below requires server call
-    //We use mock user for phase 1 instead
-    post = new Post('user3', 'Find a new nice place');
-    posttitles.push(post.title);
-    posts.push(post);
-
-    //call DOM function 
-
-    addNewPost(post) 
-    
-
-}
 
 
 
@@ -99,15 +90,24 @@ function addPost(){
 function deleteInDB(){
     
     for (i = 1; i < tableEntries.children[0].childElementCount ; i++) {
-            id = tableEntries.children[0].children[i].children[0].innerText
+            content = tableEntries.children[0].children[i].children[0].innerText
+            likes = tableEntries.children[0].children[i].children[1].innerText
+            replies = tableEntries.children[0].children[i].children[1].innerText
             //users = getUsersOrPosts()
             //console.log(users)
-            same = posts.filter(post => post._id == id)
-            //console.log(same)
-            if (removePosts.includes(id) && same.length > 0){
+    
+            same = posts.filter(post =>
+                post.likes == likes &&
+                post.replies.length == replies &&
+                post.postContent == content)
+            
+            console.log(same)
+            if (removePosts.includes(content) && same.length > 0){
                 post = same[0]
-                log(post)
                 deletePosts(post._id)
+                deleteUserPost(post._id)
+                index = user.posts.indexOf(post);
+                user.posts.splice(index,1);
 
             }
         }
@@ -116,28 +116,26 @@ function deleteInDB(){
 }
 
 
-function getPosts(id) {
-    var url = '/users' + id;
+
+function deleteUserPost(id) {
+    var url = '/deletePost/' + id;
+    
 
 
-
-    fetch(url)
+    fetch(url, {
+        method: 'delete'
+    })
     .then((res) => { 
         if (res.status === 200) {
            return res.json() 
        } else {
-            alert('Could not get user')
+            alert('Could not get id')
        }                
     })
     .then((json) => {
-        if (document.title == "CSC309 team54 project admin profile:users"){
-            user = json
-            json.posts.map(() => addNewPost(u) )
-            posts =  json.posts
-            console.log(post)
         
-        }
-
+            console.log(json)
+         
 
         
     }).catch((error) => {
@@ -146,7 +144,8 @@ function getPosts(id) {
 }
 
 
-function deleterPosts(id) {
+
+function deletePosts(id) {
     var url = '/posts/' + id;
     
 
@@ -172,6 +171,35 @@ function deleterPosts(id) {
     })
 }
 
+
+function getCurrUser(){
+    const url = '/getCurrUser'
+    
+
+     fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+            return res.json() 
+       } else {
+            alert('Could not get user')
+       }                
+    })
+    .then((json) => {
+        user = json[0]
+        username = document.querySelector("#username")
+        useremail = document.querySelector("#useremail")
+        log(user)
+        username.innerText = user.name
+        useremail.innerText = user.email
+        posts = user.posts
+        user.posts.map((u) =>addNewPost(u) )
+        
+        return json[0]
+        
+    }, (error) => {
+        log(error);
+    })
+}
 
 
 
@@ -216,16 +244,12 @@ function changeRemoveButton(button){
 
 function removeall(){
     for (i = 1; i < tableEntries.children[0].childElementCount ; i++) {
-        posttitle = tableEntries.children[0].children[i].children[0].innerText
-        if (removePosts.includes(posttitle)){
+        postid = tableEntries.children[0].children[i].children[0].innerText
+        if (removePosts.includes(postid)){
             toremove = tableEntries.children[0].children[i]
             tableEntries.children[0].removeChild(toremove)
-            index =removePosts.indexOf(posttitle);
+            index =removePosts.indexOf(postid);
             removePosts.splice(index,1);
-            index = posttitles.indexOf(posttitle)
-            posttitles.splice(index,1)
-            posts.splice(index,1)
-            numberOfPosts--;
             i--;
 
         }
@@ -274,6 +298,8 @@ function addNewPost(post){
 	tableEntries.children[0].append(tableRow)
 
 }
+
+
 
 
 
