@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// const {Post} = require('./post')
+const {Post} = require('./post')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 

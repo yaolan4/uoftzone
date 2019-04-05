@@ -179,9 +179,7 @@ app.get('/logged_f', checkLoggedIn, (req, res) => {
     res.sendFile(__dirname + '/public/logged_f.html')
 })
 
-app.get('/admin', (req, res) => {
 
-})
 
 
 //Navigation for admin
@@ -210,6 +208,7 @@ app.get('/admin_profile_posts', authenticateAdmin, (req, res) => {
     }
 })
 
+//Admin side navagation
 app.get('/admin/change_email', authenticateAdmin,(req, res) => {
 
 })
@@ -416,8 +415,28 @@ app.post('/posts/:id', authenticateUser, (req, res) => {
 	    })
 })
 
+//Delete a post from user's list
+app.delete('/deletePost/:id', checkLoggedIn, async (req, res) => {
+    const id = req.params.id
+
+    
+    User.findOneAndUpdate({
+        _id: new ObjectID(req.session.user)
+    }, {
+        
+        $pull:  { posts: { "_id": id} } 
+    }, {
+        returnOriginal: false // gives us back updated arguemnt
+    }).then((result) => {
+        log(result)
+    });
+
+
+})
+
+
 //Delete a post and all its replies
- app.delete('/posts/:id', authenticateUser, (req, res) => {
+ app.delete('/posts/:id', authenticateAdmin, (req, res) => {
 	const id = req.params.id
 
 	if (!ObjectID.isValid(id)) {

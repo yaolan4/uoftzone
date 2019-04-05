@@ -8,6 +8,8 @@ log = console.log
 //Get DOM from html 
 const tableEntries = document.querySelector('#usersTable')
 const removeEntries = document.querySelector('#usersAndposts')
+const logOut = document.querySelector('#logout')
+const logOutButton = document.querySelector('.logoutButton')
 
 var posts
 var users
@@ -15,8 +17,12 @@ var users
 //Entries wait for events
 tableEntries.addEventListener('click', changeRemoveStatus)
 removeEntries.addEventListener('click', remove)
+logOut.addEventListener('click', adminLogOut)
+logOutButton.addEventListener('click', adminLogOut)
+
 
 /**call get function at beginning to get all data */
+getCurrAdmin()
 getUsersOrPosts()
 
 
@@ -100,14 +106,14 @@ function adminLogOut() {
             // Handle response we get from the API
             // Usually check the error codes to see what happened
             if (res.status === 200) {
-                console.log(res)
+               
                 window.location.href = res.url;
             } else {
                 console.log('status not 200')
                 alert('log out not successful')
 
             }
-            console.log(res)
+            
         }).catch((error) => {
         alert('log out not successful')
         // loginNotSuccessful()
@@ -119,28 +125,31 @@ function deleteInDB(){
     if (document.title == "CSC309 team54 project admin profile:users"){
         for (i = 1; i < tableEntries.children[0].childElementCount ; i++) {
             username = tableEntries.children[0].children[i].children[0].innerText
-            //users = getUsersOrPosts()
-            //console.log(users)
+            
             same = users.filter(user => user.name == username)
-            //console.log(same)
+
             if (removeUsers.includes(username) && same.length > 0){
                 user = same[0]
-                log(user)
                 deleteUsersOrPosts(user._id)
+                getUsersOrPosts()
+                index = users.indexOf(user);
+                users.splice(index,1);
 
             }
         }
     }else if (document.title == "CSC309 team54 project admin profile:posts"){
         for (i = 1; i < tableEntries.children[0].childElementCount ; i++) {
+           
             id = tableEntries.children[0].children[i].children[0].innerText
-            //users = getUsersOrPosts()
-            //console.log(users)
+    
             same = posts.filter(post => post._id == id)
-            //console.log(same)
+           
             if (removePosts.includes(id) && same.length > 0){
                 post = same[0]
-                log(post)
+              
                 deleteUsersOrPosts(post._id)
+                index = posts.indexOf(post);
+                posts.splice(index,1);
 
             }
         }
@@ -163,18 +172,18 @@ function getUsersOrPosts() {
         if (res.status === 200) {
            return res.json() 
        } else {
-            alert('Could not get students')
+            alert('Could not get users or posts')
        }                
     })
     .then((json) => {
         if (document.title == "CSC309 team54 project admin profile:users"){
             json.users.map((u) => addNewUser(u) )
             users =  json.users
-            console.log(users)
+            
         }else if (document.title == "CSC309 team54 project admin profile:posts"){
             json.posts.map((u) =>addNewPost(u) )
             posts = json.posts
-            console.log(posts)
+            
         }
 
 
@@ -186,12 +195,14 @@ function getUsersOrPosts() {
 
 
 function deleteUsersOrPosts(id) {
+    log(id)
     var url
     if (document.title == "CSC309 team54 project admin profile:users"){
         url = '/users/' + id;
     }else if (document.title == "CSC309 team54 project admin profile:posts"){
         url = '/posts/' + id;
     }
+    log(url)
 
 
     fetch(url, {
@@ -201,17 +212,14 @@ function deleteUsersOrPosts(id) {
         if (res.status === 200) {
            return res.json() 
        } else {
-            alert('Could not get students')
+            alert('Could not get Users or Posts')
        }                
     })
     .then((json) => {
-        if (document.title == "CSC309 team54 project admin profile:users"){
-            console.log(json)
-          
-        }else if (document.title == "CSC309 team54 project admin profile:posts"){
+        
             console.log(json)
          
-        }
+        
 
         
     }).catch((error) => {
@@ -220,6 +228,33 @@ function deleteUsersOrPosts(id) {
 }
 
 
+function getCurrAdmin(){
+    const url = '/getCurrAdmin'
+    
+
+     fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+            return res.json() 
+       } else {
+            alert('Could not get admin')
+       }                
+    })
+    .then((json) => {
+
+        admin = json[0]
+        adminname = document.querySelector("#adminname")
+        adminemail = document.querySelector("#adminemail")
+    
+        adminname.innerText = admin.name
+        adminemail.innerText = admin.email
+        
+        return json[0]
+        
+    }, (error) => {
+        log(error);
+    })
+}
 
 
 
