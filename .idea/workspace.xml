@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0e84158-a2ac-4331-8e48-71275a570440" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mongo-data/WiredTiger.turtle" beforeDir="false" afterPath="$PROJECT_DIR$/mongo-data/WiredTiger.turtle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mongo-data/WiredTiger.wt" beforeDir="false" afterPath="$PROJECT_DIR$/mongo-data/WiredTiger.wt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mongo-data/diagnostic.data/metrics.2019-04-04T15-01-24Z-00000" beforeDir="false" afterPath="$PROJECT_DIR$/mongo-data/diagnostic.data/metrics.2019-04-04T15-01-24Z-00000" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mongo-data/diagnostic.data/metrics.interim" beforeDir="false" afterPath="$PROJECT_DIR$/mongo-data/diagnostic.data/metrics.interim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mongo-data/index-6-7072008459052192200.wt" beforeDir="false" afterPath="$PROJECT_DIR$/mongo-data/index-6-7072008459052192200.wt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mongo-data/journal/WiredTigerLog.0000000001" beforeDir="false" afterPath="$PROJECT_DIR$/mongo-data/journal/WiredTigerLog.0000000001" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mongo-data/sizeStorer.wt" beforeDir="false" afterPath="$PROJECT_DIR$/mongo-data/sizeStorer.wt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -75,8 +69,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="444">
-              <caret line="286" column="23" lean-forward="true" selection-start-line="286" selection-start-column="23" selection-end-line="286" selection-end-column="23" />
+            <state relative-caret-position="838">
+              <caret line="305" column="29" lean-forward="true" selection-start-line="305" selection-start-column="29" selection-end-line="305" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -302,7 +296,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554450419411" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554450434313" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -344,12 +338,12 @@
       <workItem from="1554256654779" duration="24763000" />
       <workItem from="1554321672280" duration="761000" />
       <workItem from="1554349801403" duration="6539000" />
-      <workItem from="1554361542768" duration="27351000" />
+      <workItem from="1554361542768" duration="27735000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="82685000" />
+    <option name="totallyTimeSpent" value="83069000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="959" extended-state="6" />
@@ -701,8 +695,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="444">
-          <caret line="286" column="23" lean-forward="true" selection-start-line="286" selection-start-column="23" selection-end-line="286" selection-end-column="23" />
+        <state relative-caret-position="838">
+          <caret line="305" column="29" lean-forward="true" selection-start-line="305" selection-start-column="29" selection-end-line="305" selection-end-column="29" />
         </state>
       </provider>
     </entry>
