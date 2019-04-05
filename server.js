@@ -10,15 +10,15 @@ const app = express();
 const path = require('path')
 app.use(bodyParser.json());
 
-const { ObjectID } = require('mongodb')
+const {ObjectID} = require('mongodb')
 
 // Import our mongoose connection
-const { mongoose } = require('./db/mongoose');
+const {mongoose} = require('./db/mongoose');
 
 // Import the models
-const { Post } = require('./model/post')
-const { User } = require('./model/user')
-const { Admin } = require('./model/admin')
+const {Post} = require('./model/post')
+const {User} = require('./model/user')
+const {Admin} = require('./model/admin')
 
 app.use(express.static("public"));
 
@@ -60,18 +60,11 @@ const authenticateUser = (req, res, next) => {
 
 // Middleware for authentication for resources
 const authenticateAdmin = (req, res, next) => {
-    if (req.session.admin) {
-        Admin.findById(req.session.admin).then((admin) => {
-            if (!admin) {
-                return Promise.reject()
-            } else {
-                req.admin = admin
-                next()
-            }
-        }).catch((error) => {
-            res.redirect('/')
-        })
-    } else {
+    if (req.session.admin === 1) {
+        req.admin = 1
+        next()
+    }
+    else {
         res.redirect('/')
     }
 }
@@ -119,10 +112,6 @@ app.get('/', sessionChecker, (req, res) => {
 })
 
 
-
-
-
-
 //Navigation for  logout
 app.get('/users/logout', authenticateUser, (req, res) => {
     req.session.destroy((error) => {
@@ -137,23 +126,12 @@ app.get('/users/logout', authenticateUser, (req, res) => {
 
 //use what's in admin_server to check authenticaZtion of admin_Server
 //Get all users
-app.get('/getAllUser', authenticateUser, (req, res) => {
-    log('I have reached here')
-    User.find().then((user) => {
-        res.send(user)
-    }, (error) => {
-        res.status(500).send(error)
-    })
-})
-
-
 
 //Navigation for guest
 
-app.get('/guest_b',sessionChecker, (req, res) => {
+app.get('/guest_b', sessionChecker, (req, res) => {
     res.sendFile(__dirname + '/public/not_logged_b.html')
 })
-
 
 
 app.get('/guest_f', sessionChecker, (req, res) => {
@@ -161,19 +139,19 @@ app.get('/guest_f', sessionChecker, (req, res) => {
 })
 
 //Navigatio for user
-app.get('/user_profile',authenticateUser, (req, res) => {
-    if(req.user) {
+app.get('/user_profile', authenticateUser, (req, res) => {
+    if (req.user) {
         req.session.user = req.user._id;
         log(req.admin)
         log(req.session.admin)
-         res.sendFile(__dirname + '/public/user_profile.html') //put the admin html
+        res.sendFile(__dirname + '/public/user_profile.html') //put the admin html
     } else {
         res.redirect('/')
     }
 })
 
 
-app.get('/logged_q',checkLoggedIn, (req, res) => {
+app.get('/logged_q', checkLoggedIn, (req, res) => {
     res.sendFile(__dirname + '/public/logged_q.html')
 })
 
@@ -186,14 +164,12 @@ app.get('/logged_f', checkLoggedIn, (req, res) => {
 })
 
 
-
-
 //Navigation for admin
 
 //go to admin profile users
 app.get('/admin_profile_users', authenticateAdmin, (req, res) => {
-    if(req.admin) {
-        req.session.admin = req.admin._id;
+    if (req.admin) {
+        req.session.admin = req.admin;
         log(req.admin)
         log(req.session.admin)
         res.sendFile(__dirname + '/public/admin_profile_users.html')
@@ -204,8 +180,8 @@ app.get('/admin_profile_users', authenticateAdmin, (req, res) => {
 
 //go to admin profile posts
 app.get('/admin_profile_posts', authenticateAdmin, (req, res) => {
-    if(req.admin) {
-        req.session.admin = req.admin._id;
+    if (req.admin) {
+        req.session.admin = req.admin;
         log(req.admin)
         log(req.session.admin)
         res.sendFile(__dirname + '/public/admin_profile_posts.html')
@@ -215,11 +191,11 @@ app.get('/admin_profile_posts', authenticateAdmin, (req, res) => {
 })
 
 //Admin side navagation
-app.get('/admin/change_email', authenticateAdmin,(req, res) => {
+app.get('/admin/change_email', authenticateAdmin, (req, res) => {
     res.sendFile(__dirname + '/public/change_email_admin.html')
 })
 
-app.get('/admin/change_password',authenticateAdmin, (req, res) => {
+app.get('/admin/change_password', authenticateAdmin, (req, res) => {
     res.sendFile(__dirname + '/public/change_pswd_admin.html')
 })
 
@@ -227,11 +203,11 @@ app.get('/admin_q', checkAdminLoggedIn, (req, res) => {
     res.sendFile(__dirname + '/public/admin_q.html')
 })
 
-app.get('/user/change_email', authenticateUser,(req, res) => {
+app.get('/user/change_email', authenticateUser, (req, res) => {
     res.sendFile(__dirname + '/public/change_email.html')
 })
 
-app.get('/user/change_password',authenticateUser, (req, res) => {
+app.get('/user/change_password', authenticateUser, (req, res) => {
     res.sendFile(__dirname + '/public/change_pswd.html')
 })
 
@@ -288,44 +264,34 @@ app.post('/login', sessionChecker, (req, res) => {
             log(error)
             res.status(400).send(error)
         })
-    } else {
-        Admin.findByNamePassword(name, password).then((admin) => {
-            if (!admin) {
-                log('no matching admin :(')
-                res.redirect('/login')
-            } else {
-                // Add the user to the session cookie that we will
-                // send to the client
-                req.session.admin = admin._id;
-
-                // req.session.name = admin.name
-                log('found admin :) admin id: ' + req.session.admin)
-                res.redirect('/admin_q')
-            }
-        }).catch((error) => {
-            log(error)
-            res.status(400).send(error)
-        })
+    } else if (name.toLowerCase() === 'admin' && password.toLowerCase() === 'admin') {
+        req.session.admin = 1;
+        // req.session.name = admin.name
+        log('found admin :) admin id: ' + req.session.admin)
+        res.redirect('/admin_q')
     }
+}).catch((error) => {
+    log(error)
+    res.status(400).send(error)
 })
 
 //user sign up
 app.post('/users', (req, res) => {
-	// Add code here
-	const user =  new User ({
+    // Add code here
+    const user = new User({
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
         posts: req.body.posts,
-        reported:req.body.reported
-	})
+        reported: req.body.reported
+    })
 
     user.save().then((result) => {
         res.redirect('/login')
         // res.send(result)
-	}, (error) => {
-		res.status(400).send(error) // 400 for bad request
-	})
+    }, (error) => {
+        res.status(400).send(error) // 400 for bad request
+    })
 })
 
 
@@ -341,104 +307,102 @@ app.get('/users', authenticateAdmin, (req, res) => {
 })
 
 
-
 //Delete a user
 app.delete('/users/:id', authenticateAdmin, (req, res) => {
-	const id = req.params.id
+    const id = req.params.id
 
-	// Good practise is to validate the id
-	if (!ObjectID.isValid(id)) {
-		return res.status(404).send()
-	}
+    // Good practise is to validate the id
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send()
+    }
 
-	// Otheriwse, findByIdAndRemove
-	User.findByIdAndRemove(id).then((user) => {
-		if (!user) {
-			res.status(404).send()
-		} else {
-			res.send({ user })
-		}
-	}).catch((error) => {
-		res.status(400).send(error)
-	})
+    // Otheriwse, findByIdAndRemove
+    User.findByIdAndRemove(id).then((user) => {
+        if (!user) {
+            res.status(404).send()
+        } else {
+            res.send({user})
+        }
+    }).catch((error) => {
+        res.status(400).send(error)
+    })
 
 
 })
 
 //Make a post
 app.post('/posts', authenticateUser, (req, res) => {
-	const post =  new Post ({
-		   likes: req.body.likes,
-       reported: req.body.reported,
-       replies: req.body.replies,
-       poster: req.body.poster,
-       postContent: req.body.postContent,
-       category: req.body.category
-	})
+    const post = new Post({
+        likes: req.body.likes,
+        reported: req.body.reported,
+        replies: req.body.replies,
+        poster: req.body.poster,
+        postContent: req.body.postContent,
+        category: req.body.category
+    })
 
     post.save().then((result) => {
-		res.send(result)
-	}, (error) => {
-		res.status(400).send(error) // 400 for bad request
-	})
+        res.send(result)
+    }, (error) => {
+        res.status(400).send(error) // 400 for bad request
+    })
 })
 
 //Get all posts
 app.get('/posts', authenticateAdmin, (req, res) => {
-	log('I have reached here')
-	Post.find().then((posts) => {
-		res.send({ posts})
-	}, (error) => {
-		res.status(500).send(error)
-	})
+    log('I have reached here')
+    Post.find().then((posts) => {
+        res.send({posts})
+    }, (error) => {
+        res.status(500).send(error)
+    })
 })
 
 //Make reply to a post
 app.post('/posts/:id', authenticateUser, (req, res) => {
 
-  const id = req.params.id
+    const id = req.params.id
 
-	const post =  new Post ({
-		likes: req.body.likes,
-		reported: req.body.reported,
-		replies: req.body.replies,
-		poster: req.body.poster,
-		postContent: req.body.postContent,
-		category: req.body.category
-})
-
-
-	if (!ObjectID.isValid(id)) {
-		res.status(404).send()
-	}
+    const post = new Post({
+        likes: req.body.likes,
+        reported: req.body.reported,
+        replies: req.body.replies,
+        poster: req.body.poster,
+        postContent: req.body.postContent,
+        category: req.body.category
+    })
 
 
-	Post.findOneAndUpdate({_id: req.params.id}, {
-		$push: {replies: post}
-	},{new: true}).then((reply) => {
-		if (!reply) {
-		    res.status(404).send()
-		} else {
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send()
+    }
 
 
+    Post.findOneAndUpdate({_id: req.params.id}, {
+        $push: {replies: post}
+    }, {new: true}).then((reply) => {
+        if (!reply) {
+            res.status(404).send()
+        } else {
 
-			res.send(reply)
-		}
-	    }).catch((error) => {
-		    res.status(400).send(error)
-	    })
+
+            res.send(reply)
+        }
+    }).catch((error) => {
+        res.status(400).send(error)
+    })
 })
 
 //Delete a post from user's list
 app.delete('/deletePost/:id', checkLoggedIn, async (req, res) => {
     const id = req.params.id
 
-    
+
     User.findOneAndUpdate({
         _id: new ObjectID(req.session.user)
     }, {
-        
-        $pull:  { posts: { "_id": id} } 
+
+        $pull: {posts: {"_id": id}}
     }, {
         returnOriginal: false // gives us back updated arguemnt
     }).then((result) => {
@@ -450,35 +414,35 @@ app.delete('/deletePost/:id', checkLoggedIn, async (req, res) => {
 
 
 //Delete a post and all its replies
- app.delete('/posts/:id', authenticateAdmin, (req, res) => {
-	const id = req.params.id
+app.delete('/posts/:id', authenticateAdmin, (req, res) => {
+    const id = req.params.id
 
-	if (!ObjectID.isValid(id)) {
-		return res.status(404).send()
-	}
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send()
+    }
 
 
-	// Otheriwse, findByIdAndRemove
-	Post.findByIdAndRemove(id).then((post) => {
-		if (!post) {
-			res.status(404).send()
-		} else {
-			const replies = post.replies
+    // Otheriwse, findByIdAndRemove
+    Post.findByIdAndRemove(id).then((post) => {
+        if (!post) {
+            res.status(404).send()
+        } else {
+            const replies = post.replies
 
-			replies.map(reply => {
-			Post.deleteOne( {"_id" : reply._id}).then((post) => {
-					if (!post) {
-						res.status(404).send()
-					} else {
-						res.send({ post })
-			    }
-			})
-		})
-			res.send({ post })
-	}
-	}).catch((error) => {
-		res.status(400).send(error)
-	})
+            replies.map(reply => {
+                Post.deleteOne({"_id": reply._id}).then((post) => {
+                    if (!post) {
+                        res.status(404).send()
+                    } else {
+                        res.send({post})
+                    }
+                })
+            })
+            res.send({post})
+        }
+    }).catch((error) => {
+        res.status(400).send(error)
+    })
 
 })
 
@@ -514,7 +478,7 @@ app.patch('/liked', authenticateUser, async (req, res) => {
         _id: new ObjectID(beingmodified[0].poster), "posts._id": new ObjectID(beingmodified[0]._id)
     }, {
         // update operators: $set and $inc
-        $inc: { "posts.$.likes" : 1 }
+        $inc: {"posts.$.likes": 1}
     }, {
         returnOriginal: false // gives us back updated arguemnt
     }).then((result) => {
@@ -554,7 +518,7 @@ app.patch('/unliked', authenticateUser, async (req, res) => {
         _id: new ObjectID(beingmodified[0].poster), "posts._id": new ObjectID(beingmodified[0]._id)
     }, {
         // update operators: $set and $inc
-        $inc: { "posts.$.likes" : -1 }
+        $inc: {"posts.$.likes": -1}
     }, {
         returnOriginal: false // gives us back updated arguemnt
     }).then((result) => {
@@ -596,7 +560,7 @@ app.patch('/report', authenticateUser, async (req, res) => {
         _id: new ObjectID(beingmodified[0].poster), "posts._id": new ObjectID(beingmodified[0]._id)
     }, {
         // update operators: $set and $inc
-        $inc: { "posts.$.reported" : 1, reported: 1}
+        $inc: {"posts.$.reported": 1, reported: 1}
     }, {
         returnOriginal: false // gives us back updated arguemnt
     }).then((result) => {
@@ -637,7 +601,7 @@ app.patch('/unreport', authenticateUser, async (req, res) => {
         _id: new ObjectID(beingmodified[0].poster), "posts._id": new ObjectID(beingmodified[0]._id)
     }, {
         // update operators: $set and $inc
-        $inc: { "posts.$.reported" : -1, reported: -1}
+        $inc: {"posts.$.reported": -1, reported: -1}
     }, {
         returnOriginal: false // gives us back updated arguemnt
     }).then((result) => {
@@ -655,7 +619,7 @@ app.get('/getCurrUser', checkLoggedIn, (req, res) => {
         else {
             res.status(404).send()
         }
-    }, (error) =>  {
+    }, (error) => {
         log(error)
     })
 })
@@ -669,19 +633,19 @@ app.get('/getCurrAdmin', checkAdminLoggedIn, (req, res) => {
         else {
             res.status(404).send()
         }
-    }, (error) =>  {
+    }, (error) => {
         log(error)
     })
 })
 
 app.post('/addPost', checkLoggedIn, async (req, res) => {
-    const post =  new Post ({
-       likes: req.body.likes,
-       reported: req.body.reported,
-       replies: req.body.replies,
-       poster: req.body.poster,
-       postContent: req.body.postContent,
-       category: req.body.category
+    const post = new Post({
+        likes: req.body.likes,
+        reported: req.body.reported,
+        replies: req.body.replies,
+        poster: req.body.poster,
+        postContent: req.body.postContent,
+        category: req.body.category
     })
     await post.save().then((result) => {
         res.send(result)
@@ -703,7 +667,7 @@ app.post('/addPost', checkLoggedIn, async (req, res) => {
         _id: new ObjectID(req.session.user)
     }, {
         // update operators: $set and $inc
-        $push: { posts: target}
+        $push: {posts: target}
     }, {
         returnOriginal: false // gives us back updated arguemnt
     }).then((result) => {
@@ -713,13 +677,13 @@ app.post('/addPost', checkLoggedIn, async (req, res) => {
 
 app.post('/addReply', checkLoggedIn, async (req, res) => {
     //1.save post to database
-    const post =  new Post ({
-       likes: req.body.newpost.likes,
-       reported: req.body.newpost.reported,
-       replies: req.body.newpost.replies,
-       poster: req.body.newpost.poster,
-       postContent: req.body.newpost.postContent,
-       category: req.body.newpost.category
+    const post = new Post({
+        likes: req.body.newpost.likes,
+        reported: req.body.newpost.reported,
+        replies: req.body.newpost.replies,
+        poster: req.body.newpost.poster,
+        postContent: req.body.newpost.postContent,
+        category: req.body.newpost.category
     })
     await post.save().then((result) => {
         res.send(result)
@@ -754,7 +718,7 @@ app.post('/addReply', checkLoggedIn, async (req, res) => {
         _id: new ObjectID(req.session.user)
     }, {
         // update operators: $set and $inc
-        $push: { posts: newpost[0]}
+        $push: {posts: newpost[0]}
     }, {
         returnOriginal: false // gives us back updated arguemnt
     }).then((result) => {
@@ -771,12 +735,12 @@ app.post('/addReply', checkLoggedIn, async (req, res) => {
     })
     log(oldpost);
     await User.findOneAndUpdate(
-        {$and:[{"_id":new ObjectID(oldpost[0].poster)},{"posts.postContent":oldpost[0].postContent},{"posts.category":oldpost[0].category}]}, {
-        // update operators: $set and $inc
-        $push: {"posts.$.replies": newpost[0]}
-    }, {
-        returnOriginal: false // gives us back updated arguemnt
-    }).then((result) => {
+        {$and: [{"_id": new ObjectID(oldpost[0].poster)}, {"posts.postContent": oldpost[0].postContent}, {"posts.category": oldpost[0].category}]}, {
+            // update operators: $set and $inc
+            $push: {"posts.$.replies": newpost[0]}
+        }, {
+            returnOriginal: false // gives us back updated arguemnt
+        }).then((result) => {
         // log(result)
     });
 
@@ -784,7 +748,7 @@ app.post('/addReply', checkLoggedIn, async (req, res) => {
 
 //go to user profile
 app.get('/user_profile', authenticateUser, (req, res) => {
-    if(req.user) {
+    if (req.user) {
         req.session.user = req.user._id;
         log(req.user)
         log(req.session.user)
@@ -836,7 +800,7 @@ app.post('/admins', (req, res) => {
 app.patch('/updateEmail', (req, res) => {
 
     User.findOneAndUpdate({
-     "_id": new ObjectID(req.session.user), "email": req.body.oldEmail
+        "_id": new ObjectID(req.session.user), "email": req.body.oldEmail
     }, {
         // update operators: $set and $inc
         $set: {email: req.body.newEmail}
@@ -885,8 +849,6 @@ app.patch('/updateEmail', (req, res) => {
 // })
 
 
-
-
 app.listen(port, () => {
-	log(`Listening on port ${port}...`)
+    log(`Listening on port ${port}...`)
 });
