@@ -18,25 +18,27 @@ loginBox.addEventListener('click', allClickEvents);
 qA.addEventListener('click', navigate)
 bE.addEventListener('click', navigate)
 fF.addEventListener('click', navigate)
+
 // log(page);
 
-async function getCurrUser(){
+async function getCurrUser() {
     const url = '/getCurrUser'
     fetch(url)
-    .then((res) => { 
-        if (res.status === 200) {
-           return res.json() 
-       } else {
-            alert('Could not get students')
-       }                
-    })
-    .then((json) => {
-        // log(json)
-    }).catch((error) => {
+        .then((res) => {
+            if (res.status === 200) {
+                return res.json()
+            } else {
+                alert('Could not get students')
+            }
+        })
+        .then((json) => {
+            // log(json)
+        }).catch((error) => {
         console.log(error)
     })
 }
-getCurrUser();
+
+// getCurrUser();
 
 // Functions that don't edit DOM themselves, but can call DOM functions 
 function allClickEvents(e) {
@@ -146,7 +148,7 @@ function goToUserProfile() {
 }
 
 function goToAdminProfile() {
-    const url = '/admin_profile';
+    const url = '/admin_profile_users';
 
     // Create our request constructor with all the parameters we need
     const request = new Request(url, {

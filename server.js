@@ -185,21 +185,30 @@ app.get('/admin', (req, res) => {
 
 
 //Navigation for admin
-app.get('/admin_profile',authenticateAdmin, (req, res) => {
+
+//go to admin profile users
+app.get('/admin_profile_users', authenticateAdmin, (req, res) => {
     if(req.admin) {
         req.session.admin = req.admin._id;
         log(req.admin)
         log(req.session.admin)
-        // res.sendFile(__dirname + '/public/admin_profile_users.html') //put the admin html
+        res.sendFile(__dirname + '/public/admin_profile_users.html')
     } else {
         res.redirect('/')
     }
 })
 
-app.get('/admin_profile2',authenticateAdmin, (req, res) => {
-	res.sendFile(__dirname + '/public/admin_profile_posts.html')
+//go to admin profile posts
+app.get('/admin_profile_posts', authenticateAdmin, (req, res) => {
+    if(req.admin) {
+        req.session.admin = req.admin._id;
+        log(req.admin)
+        log(req.session.admin)
+        res.sendFile(__dirname + '/public/admin_profile_posts.html')
+    } else {
+        res.redirect('/')
+    }
 })
-
 
 app.get('/admin/change_email', authenticateAdmin,(req, res) => {
 
@@ -618,6 +627,20 @@ app.get('/getCurrUser', checkLoggedIn, (req, res) => {
     })
 })
 
+app.get('/getCurrAdmin', checkAdminLoggedIn, (req, res) => {
+
+    Admin.find({_id: req.session.admin}).then(admin => {
+        if (admin) {
+            res.send(admin)
+        }
+        else {
+            res.status(404).send()
+        }
+    }, (error) =>  {
+        log(error)
+    })
+})
+
 app.post('/addPost', checkLoggedIn, async (req, res) => {
     const post =  new Post ({
        likes: req.body.likes,
@@ -737,19 +760,6 @@ app.get('/user_profile', authenticateUser, (req, res) => {
         res.redirect('/')
     }
 })
-
-//go to admin profile users
-app.get('/admin_profile_users', authenticateAdmin, (req, res) => {
-    if(req.admin) {
-        req.session.admin = req.admin._id;
-        log(req.admin)
-        log(req.session.admin)
-        res.sendFile(__dirname + '/public/admin_profile_users.html')
-    } else {
-        res.redirect('/')
-    }
-})
-
 
 //user signup
 app.post('/users', (req, res) => {

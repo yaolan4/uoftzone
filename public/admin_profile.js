@@ -37,12 +37,49 @@ function remove(e) {
         deleteInDB()
         removeall()
 
+    } else if (e.target.classList.contains('allPostsButton')) {
+        navigateAdminProfileTabs('/admin_profile_posts')
+    } else if (e.target.classList.contains('allUsersButton')) {
+        navigateAdminProfileTabs('/admin_profile_users')
     }
 }
 
 /**External data functions */
 /**The following functions  need obtain external severs data first
 */
+
+//navigate btn admin_profile_users & admin_profile_posts
+function navigateAdminProfileTabs(url) {
+
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: 'get',
+        credentials: 'include', //include in actual log out method so that cookies can be erased
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+    console.log('making a request to log out')
+    fetch(request)
+        .then((res) => {
+            // Handle response we get from the API
+            // Usually check the error codes to see what happened
+            if (res.status === 200) {
+                console.log(res)
+                window.location.href = res.url;
+            } else {
+                console.log('status not 200')
+                alert('log out not successful')
+
+            }
+            console.log(res)
+        }).catch((error) => {
+        alert('log out not successful')
+        // loginNotSuccessful()
+        console.log(error)
+    })
+}
 
 //admin log out
 function adminLogOut() {
