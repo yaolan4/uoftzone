@@ -282,24 +282,27 @@ app.post('/login', sessionChecker, (req, res) => {
             log(error)
             res.status(400).send(error)
         })
-    } else {
-        Admin.findByNamePassword(name, password).then((admin) => {
-            if (!admin) {
-                log('no matching admin :(')
-                res.redirect('/login')
-            } else {
-                // Add the user to the session cookie that we will
-                // send to the client
-                req.session.admin = admin._id;
-
-                // req.session.name = admin.name
+    } else if(name.toLowerCase() === 'admin' && password.toLowerCase() === 'admin' ) {
+                req.session.admin = 1;
                 log('found admin :) admin id: ' + req.session.admin)
                 res.redirect('/admin_q')
-            }
-        }).catch((error) => {
-            log(error)
-            res.status(400).send(error)
-        })
+        // Admin.findByNamePassword(name, password).then((admin) => {
+        //     if (!admin) {
+        //         log('no matching admin :(')
+        //         res.redirect('/login')
+        //     } else {
+        //         // Add the user to the session cookie that we will
+        //         // send to the client
+        //         req.session.admin = admin._id;
+        //
+        //         // req.session.name = admin.name
+        //         log('found admin :) admin id: ' + req.session.admin)
+        //         res.redirect('/admin_q')
+        //     }
+        // }).catch((error) => {
+        //     log(error)
+        //     res.status(400).send(error)
+        // })
     }
 })
 
