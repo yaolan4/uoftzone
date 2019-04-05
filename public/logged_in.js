@@ -20,6 +20,25 @@ bE.addEventListener('click', navigate)
 fF.addEventListener('click', navigate)
 // log(page);
 
+async function getCurrUser(){
+    const url = '/getCurrUser'
+    fetch(url)
+
+    await fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json
+       } else {
+            alert('Could not get user')
+       }                
+    })
+    .then((json) => {
+        // do somestuff here
+    }, (error) => {
+        log(error);
+    })
+}
+
 // Functions that don't edit DOM themselves, but can call DOM functions 
 function allClickEvents(e) {
     e.preventDefault();
