@@ -20,7 +20,7 @@
     "mongodb": "^3.1.13",
     "mongoose": "^5.4.21",
     "serve-static": "^1.13.2",
-    "validator": "^10.11.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {},
   "keywords": [],
