@@ -16,7 +16,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "hbs": "^4.0.3",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^3.1.13",
     "mongoose": "^5.4.21",
     "serve-static": "^1.13.2",
